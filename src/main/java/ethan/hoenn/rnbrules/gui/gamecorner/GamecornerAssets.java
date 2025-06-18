@@ -135,7 +135,7 @@ public class GamecornerAssets {
 		BADGE_TO_POKEMON_POOL = createBadgeMap();
 
 		initialized = true;
-		LOGGER.info("GamecornerAssets initialized successfully.");
+		//LOGGER.info("GamecornerAssets initialized successfully.");
 	}
 
 	public static ItemStack getPokemonPhoto(Pokemon pokemon) {

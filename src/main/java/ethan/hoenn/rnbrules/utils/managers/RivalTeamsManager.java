@@ -75,7 +75,7 @@ public class RivalTeamsManager {
 	}
 
 	public void preloadAllTeams() {
-		LOGGER.info("Preloading rival teams...");
+		//LOGGER.info("Preloading rival teams...");
 
 		initExecutor();
 

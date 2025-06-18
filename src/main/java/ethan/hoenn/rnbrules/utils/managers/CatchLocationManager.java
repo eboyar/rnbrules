@@ -46,7 +46,7 @@ public class CatchLocationManager extends WorldSavedData implements ResetableMan
 			UUID playerUUID = UUID.fromString(uuidString);
 			HashSet<String> locations = new HashSet<>();
 
-			ListNBT locationsList = playersNBT.getList(uuidString, 8); // 8 is the type ID for StringNBT
+			ListNBT locationsList = playersNBT.getList(uuidString, 8);
 			for (int i = 0; i < locationsList.size(); i++) {
 				locations.add(locationsList.getString(i));
 			}

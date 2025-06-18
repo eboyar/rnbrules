@@ -25,7 +25,7 @@ public class DialogueFileLoader {
 			return dialogues;
 		}
 
-		System.out.println("Looking for dialogues in: " + dialogueDir.getAbsolutePath());
+		//System.out.println("Looking for dialogues in: " + dialogueDir.getAbsolutePath());
 
 		File[] files = dialogueDir.listFiles((dir, name) -> name.endsWith(".yml") || name.endsWith(".yaml"));
 		if (files == null) {
@@ -37,7 +37,7 @@ public class DialogueFileLoader {
 				DialogueFileData dialogue = loadDialogueFile(file);
 				if (dialogue != null) {
 					dialogues.add(dialogue);
-					System.out.println("Successfully loaded dialogue: " + dialogue.getDialogueId());
+					//System.out.println("Successfully loaded dialogue: " + dialogue.getDialogueId());
 				}
 			} catch (Exception e) {
 				System.err.println("Error loading dialogue file " + file.getName() + ": " + e.getMessage());
