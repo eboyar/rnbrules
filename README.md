@@ -1,5 +1,5 @@
 # rnbrules
-A comprehensive overhaul of Pixelmon to implement Dexzeh's **Run & Bun** ruleset.
+A comprehensive overhaul of Pixelmon to implement Dexzeh's **Run & Bun** ROM Hack.
 
 This mod serves as an all-in-one package that brings the majority of mechanics and game rules from the original **Run & Bun** ROM Hack into Pixelmon. All credit for the core concepts and design belongs entirely to **Dexzeh**.
 
