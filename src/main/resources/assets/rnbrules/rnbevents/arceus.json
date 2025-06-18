@@ -1,0 +1,15 @@
+{
+	"type": "battle_music",
+	"conditions": [
+		{
+			"type": "pokemon",
+			"spec": "species:arceus",
+			"wild": true
+		}
+	],
+	"music": {
+		"start": "rnbrules:arceus/intro",
+		"loop": "rnbrules:arceus/loop"
+	},
+	"priority": 100
+}

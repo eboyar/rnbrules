@@ -1,0 +1,17 @@
+com/pixelmonmod/pixelmon/client/gui/battles/VersusScreen com/pixelmonmod/pixelmon/client/gui/battles/VersusScreen
+	func_230430_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;IIF)V render
+	drawEntity (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/entity/LivingEntity;Ljava/lang/String;IIIIIIIIIIIZ)V drawEntity
+com/pixelmonmod/pixelmon/client/gui/custom/dialogue/DialogueScreen com/pixelmonmod/pixelmon/client/gui/custom/dialogue/DialogueScreen
+	func_231044_a_ (DDI)Z mouseClicked
+com/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity com/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity
+	func_70012_b (DDDFF)V moveTo
+com/pixelmonmod/pixelmon/client/gui/battles/rules/TeamSelectScreen com/pixelmonmod/pixelmon/client/gui/battles/rules/TeamSelectScreen
+	func_231160_c_ ()V init
+com/pixelmonmod/pixelmon/entities/pokeballs/OccupiedPokeBallEntity com/pixelmonmod/pixelmon/entities/pokeballs/OccupiedPokeBallEntity
+	func_70227_a (Lnet/minecraft/util/math/RayTraceResult;)V onHit
+net/minecraft/entity/ai/goal/GoalSelector net/minecraft/entity/ai/goal/GoalSelector
+	func_75776_a (ILnet/minecraft/entity/ai/goal/Goal;)V addGoal
+net/minecraft/entity/Entity net/minecraft/entity/Entity
+	func_70107_b (DDD)V setPos
+net/minecraft/command/Commands net/minecraft/command/Commands
+	func_197057_a (Ljava/lang/String;)Lcom/mojang/brigadier/builder/LiteralArgumentBuilder; literal

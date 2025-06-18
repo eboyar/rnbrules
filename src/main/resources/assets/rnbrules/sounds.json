@@ -1,0 +1,24 @@
+{
+	"sparkle": {
+		"subtitle": "rnbrules.subtitle.sparkle",
+		"sounds": ["rnbrules:sparkle"]
+	},
+	"arceus/intro": {
+		"subtitle": "rnbrules.subtitle.music.arceus",
+		"sounds": [
+			{
+				"name": "rnbrules:music/arceus/intro",
+				"stream": true
+			}
+		]
+	},
+	"arceus/loop": {
+		"subtitle": "rnbrules.subtitle.music.arceus",
+		"sounds": [
+			{
+				"name": "rnbrules:music/arceus/loop",
+				"stream": true
+			}
+		]
+	}
+}

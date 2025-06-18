@@ -1,0 +1,42 @@
+package ethan.hoenn.rnbrules.interactions;
+
+import com.pixelmonmod.pixelmon.api.interactions.IInteraction;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.links.DelegateLink;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
+import com.pixelmonmod.pixelmon.items.ElixirItem;
+import ethan.hoenn.rnbrules.utils.managers.GauntletManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
+
+public class InteractionCustomElixir implements IInteraction {
+
+	public InteractionCustomElixir() {}
+
+	public boolean processInteract(PixelmonEntity pixelmon, PlayerEntity player, Hand hand, ItemStack itemstack) {
+		if (player instanceof ServerPlayerEntity && pixelmon.getOwner() == player) {
+			Item item = itemstack.getItem();
+			if (item instanceof ElixirItem) {
+				ServerWorld world = ((ServerPlayerEntity) player).getLevel();
+				GauntletManager gm = GauntletManager.get(world);
+
+				if (!gm.isPartOfAnyGauntlet(player.getUUID()) || (gm.isPartOfAnyGauntlet(player.getUUID()) && gm.isHealingAllowedForPlayer(player.getUUID()))) {
+					if (((ElixirItem) item).useElixir(new DelegateLink(pixelmon.getPokemon())) && !player.isCreative()) {
+						player.getItemInHand(hand).shrink(1);
+					}
+
+					return true;
+				} else {
+					player.sendMessage(new StringTextComponent("§7You must complete or fail your current §dGauntlet§7 to heal your Pokemon."), player.getUUID());
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+}
