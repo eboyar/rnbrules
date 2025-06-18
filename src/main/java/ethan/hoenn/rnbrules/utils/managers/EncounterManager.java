@@ -235,7 +235,7 @@ public class EncounterManager extends WorldSavedData implements ResetableManager
 		PlayerPartyStorage storage = StorageProxy.getParty(player);
 		List<Pokemon> partyList = storage.getTeam();
 
-		if (BattleRegistry.getBattle(player) != null){
+		if (BattleRegistry.getBattle(player) != null) {
 			return false;
 		}
 
@@ -335,7 +335,6 @@ public class EncounterManager extends WorldSavedData implements ResetableManager
 					}
 				}
 			}
-
 
 			if (potentialWildSpawnPos != null) {
 				if (potentialWildSpawnPos.distSqr(playerBlockPos) >= 25.0) {

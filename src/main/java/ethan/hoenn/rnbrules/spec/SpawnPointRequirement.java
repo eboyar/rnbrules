@@ -6,10 +6,10 @@ import com.pixelmonmod.api.requirement.Requirement;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import ethan.hoenn.rnbrules.utils.misc.SpawnPointHelper;
-
 import java.util.Set;
 
 public class SpawnPointRequirement extends AbstractIntegerPokemonRequirement {
+
 	private static final Set<String> KEYS = Sets.newHashSet("spawnpoint", "spoint");
 	public static final int DEFAULT_RADIUS_SQ = 20;
 	public static final String NEEDS_SPAWN_TAG = "NeedsSpawnPoint";

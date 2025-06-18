@@ -97,7 +97,7 @@ public class LocationManager extends WorldSavedData {
 			"aquahideout",
 			"mtchimneycore",
 			"victoryroad",
-			"scorchedslab"
+			"scorchedslab",
 		};
 
 		for (String cave : caveLocations) {

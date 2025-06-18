@@ -4,6 +4,9 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.StatueEntity;
 import ethan.hoenn.rnbrules.utils.managers.EncounterManager;
 import ethan.hoenn.rnbrules.utils.managers.GlobalOTManager;
 import ethan.hoenn.rnbrules.utils.managers.StatueVisibilityManager;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,10 +15,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StatueInteractionListener {

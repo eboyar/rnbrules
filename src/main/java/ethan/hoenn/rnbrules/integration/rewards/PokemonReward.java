@@ -25,6 +25,8 @@ import dev.ftb.mods.ftbquests.quest.reward.Reward;
 import dev.ftb.mods.ftbquests.quest.reward.RewardType;
 import ethan.hoenn.rnbrules.integration.ftbquests.PokemonConfig;
 import ethan.hoenn.rnbrules.integration.ftbquests.PokemonRewardTypes;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -34,192 +36,179 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PokemonReward extends Reward {
 
-    public transient PokemonSpecification cachedSpec;
-    public int count = 1;
-    public short shinyChance = 4096;
+	public transient PokemonSpecification cachedSpec;
+	public int count = 1;
+	public short shinyChance = 4096;
 
-    public PokemonReward(Quest q) {
-        super(q);
-    }
+	public PokemonReward(Quest q) {
+		super(q);
+	}
 
-    @Override
-    public RewardType getType() {
-        return PokemonRewardTypes.POKEMON;
-    }
+	@Override
+	public RewardType getType() {
+		return PokemonRewardTypes.POKEMON;
+	}
 
-    @Override
-    public void writeData(CompoundNBT nbt) {
-        super.writeData(nbt);
-        nbt.putString("spec", this.cachedSpec == null ? "" : this.cachedSpec.toString());
-        nbt.putInt("count", this.count);
-        nbt.putShort("shinyChance", this.shinyChance);
-    }
+	@Override
+	public void writeData(CompoundNBT nbt) {
+		super.writeData(nbt);
+		nbt.putString("spec", this.cachedSpec == null ? "" : this.cachedSpec.toString());
+		nbt.putInt("count", this.count);
+		nbt.putShort("shinyChance", this.shinyChance);
+	}
 
-    @Override
-    public void readData(CompoundNBT nbt) {
-        super.readData(nbt);
-        String spec = nbt.getString("spec");
-        this.cachedSpec = spec.isEmpty() ? null : PokemonSpecificationProxy.create(spec);
-        this.count = nbt.getInt("count");
-        this.shinyChance = nbt.getShort("shinyChance");
-    }
+	@Override
+	public void readData(CompoundNBT nbt) {
+		super.readData(nbt);
+		String spec = nbt.getString("spec");
+		this.cachedSpec = spec.isEmpty() ? null : PokemonSpecificationProxy.create(spec);
+		this.count = nbt.getInt("count");
+		this.shinyChance = nbt.getShort("shinyChance");
+	}
 
-    @Override
-    public void writeNetData(PacketBuffer buffer) {
-        super.writeNetData(buffer);
-        buffer.writeUtf(this.cachedSpec == null ? "" : this.cachedSpec.toString());
-        buffer.writeVarInt(this.count);
-        buffer.writeVarInt(this.shinyChance);
-    }
+	@Override
+	public void writeNetData(PacketBuffer buffer) {
+		super.writeNetData(buffer);
+		buffer.writeUtf(this.cachedSpec == null ? "" : this.cachedSpec.toString());
+		buffer.writeVarInt(this.count);
+		buffer.writeVarInt(this.shinyChance);
+	}
 
-    @Override
-    public void readNetData(PacketBuffer buffer) {
-        super.readNetData(buffer);
-        String spec = buffer.readUtf();
-        this.cachedSpec = spec.isEmpty() ? null : PokemonSpecificationProxy.create(spec);
-        this.count = buffer.readVarInt();
-        this.shinyChance = (short) buffer.readVarInt();
-    }
+	@Override
+	public void readNetData(PacketBuffer buffer) {
+		super.readNetData(buffer);
+		String spec = buffer.readUtf();
+		this.cachedSpec = spec.isEmpty() ? null : PokemonSpecificationProxy.create(spec);
+		this.count = buffer.readVarInt();
+		this.shinyChance = (short) buffer.readVarInt();
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getConfig(ConfigGroup config) {
-        super.getConfig(config);
-        config.add("spec", new PokemonConfig(true), this.cachedSpec, v -> this.cachedSpec = v, PokemonSpecificationProxy.create("random"));
-        config.addInt("count", this.count, v -> this.count = v, 1, 1, Integer.MAX_VALUE);
-        config.addInt("shinyChance", this.shinyChance, v -> this.shinyChance = v.shortValue(), 4096, 0, Short.MAX_VALUE);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void getConfig(ConfigGroup config) {
+		super.getConfig(config);
+		config.add("spec", new PokemonConfig(true), this.cachedSpec, v -> this.cachedSpec = v, PokemonSpecificationProxy.create("random"));
+		config.addInt("count", this.count, v -> this.count = v, 1, 1, Integer.MAX_VALUE);
+		config.addInt("shinyChance", this.shinyChance, v -> this.shinyChance = v.shortValue(), 4096, 0, Short.MAX_VALUE);
+	}
 
-    @Override
-    public void claim(ServerPlayerEntity player, boolean notify) {
-        int c = this.count;
+	@Override
+	public void claim(ServerPlayerEntity player, boolean notify) {
+		int c = this.count;
 
-        while (c > 0) {
-            Pokemon pokemon = this.cachedSpec.create();
+		while (c > 0) {
+			Pokemon pokemon = this.cachedSpec.create();
 
-            if (this.shinyChance > 0 && player.getRandom().nextInt(this.shinyChance) == 0
-                    && (pokemon.getPalette().is("none") || pokemon.getPalette().is(""))) {
-                pokemon.setShiny(true);
-            }
+			if (this.shinyChance > 0 && player.getRandom().nextInt(this.shinyChance) == 0 && (pokemon.getPalette().is("none") || pokemon.getPalette().is(""))) {
+				pokemon.setShiny(true);
+			}
 
-            if (notify) {
-                new DisplayRewardToastMessage(this.id, new TranslationTextComponent("ftbquests.reward.pixelmon.pokemon.toast",
-                        this.getPokemon()), Icon.getIcon(pokemon.getSprite())).sendTo(player);
-            }
-            if (!StorageProxy.getParty(player).add(pokemon)) {
+			if (notify) {
+				new DisplayRewardToastMessage(this.id, new TranslationTextComponent("ftbquests.reward.pixelmon.pokemon.toast", this.getPokemon()), Icon.getIcon(pokemon.getSprite())).sendTo(player);
+			}
+			if (!StorageProxy.getParty(player).add(pokemon)) {}
+			c--;
 
-            }
-            c--;
+			this.cachedSpec = PokemonSpecificationProxy.create(this.cachedSpec.toString()); //Ensures the next pokemon will be randomized in case some requirements cache stuff. E.g. random species
+		}
+	}
 
-            this.cachedSpec = PokemonSpecificationProxy.create(this.cachedSpec.toString()); //Ensures the next pokemon will be randomized in case some requirements cache stuff. E.g. random species
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public Icon getAltIcon() {
+		if (cachedSpec != null && cachedSpec.getValue(SpeciesRequirement.class).isPresent() && this.cachedSpec != null && !this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
+			return Icon.getIcon(cachedSpec.create().getSprite());
+		}
+		return Icon.getIcon("pixelmon:items/pokeballs/poke_ball");
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public Icon getAltIcon() {
-        if (cachedSpec != null && cachedSpec.getValue(SpeciesRequirement.class).isPresent() && this.cachedSpec != null && !this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
-            return Icon.getIcon(cachedSpec.create().getSprite());
-        }
-        return Icon.getIcon("pixelmon:items/pokeballs/poke_ball");
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ITextComponent getAltTitle() {
+		return getPokemon();
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public ITextComponent getAltTitle() {
-        return getPokemon();
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public String getButtonText() {
+		return this.count > 1 ? this.count + "" : "";
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public String getButtonText() {
-        return this.count > 1 ? this.count + "" : "";
-    }
+	protected ITextComponent getPokemon() {
+		TranslationTextComponent pokemon = new TranslationTextComponent("pixeltweaks.lang.pokemon");
+		if (cachedSpec == null) {
+			return pokemon;
+		}
+		List<ITextComponent> componentList = new ArrayList<>();
 
-    protected ITextComponent getPokemon() {
-        TranslationTextComponent pokemon = new TranslationTextComponent("pixeltweaks.lang.pokemon");
-        if (cachedSpec == null) {
-            return pokemon;
-        }
-        List<ITextComponent> componentList = new ArrayList<>();
+		if (cachedSpec.getValue(SpeciesRequirement.class).isPresent() && this.cachedSpec != null && !this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
+			TranslationTextComponent species = new TranslationTextComponent("pixelmon." + cachedSpec.getValue(SpeciesRequirement.class).get().getKey().toLowerCase());
+			componentList.add(species);
+		} else {
+			if (cachedSpec.getValue(LegendaryRequirement.class).isPresent()) {
+				boolean legend = cachedSpec.getValue(LegendaryRequirement.class).get();
+				if (!legend) {
+					TranslationTextComponent legendText = new TranslationTextComponent("pixeltweaks.lang.legendary");
+					TranslationTextComponent nonText = new TranslationTextComponent("pixeltweaks.lang.not", legendText);
 
-        if (cachedSpec.getValue(SpeciesRequirement.class).isPresent() && this.cachedSpec != null && !this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
-            TranslationTextComponent species = new TranslationTextComponent("pixelmon." +
-                    cachedSpec.getValue(SpeciesRequirement.class).get().getKey().toLowerCase());
-            componentList.add(species);
-        } else {
-            if (cachedSpec.getValue(LegendaryRequirement.class).isPresent()) {
-                boolean legend = cachedSpec.getValue(LegendaryRequirement.class).get();
-                if (!legend) {
-                    TranslationTextComponent legendText = new TranslationTextComponent("pixeltweaks.lang.legendary");
-                    TranslationTextComponent nonText = new TranslationTextComponent("pixeltweaks.lang.not", legendText);
+					componentList.add(nonText);
+				} else {
+					TranslationTextComponent legendText = new TranslationTextComponent("pixeltweaks.lang.legendary");
+					componentList.add(legendText);
+				}
+			}
+			if (cachedSpec.getValue(UltraBeastRequirement.class).isPresent()) {
+				boolean ultra = cachedSpec.getValue(UltraBeastRequirement.class).get();
+				if (!ultra) {
+					TranslationTextComponent ultraText = new TranslationTextComponent("pixeltweaks.lang.ultrabeast");
+					TranslationTextComponent nonText = new TranslationTextComponent("pixeltweaks.lang.not", ultraText);
 
-                    componentList.add(nonText);
-                } else {
-                    TranslationTextComponent legendText = new TranslationTextComponent("pixeltweaks.lang.legendary");
-                    componentList.add(legendText);
-                }
-            }
-            if (cachedSpec.getValue(UltraBeastRequirement.class).isPresent()) {
-                boolean ultra = cachedSpec.getValue(UltraBeastRequirement.class).get();
-                if (!ultra) {
-                    TranslationTextComponent ultraText = new TranslationTextComponent("pixeltweaks.lang.ultrabeast");
-                    TranslationTextComponent nonText = new TranslationTextComponent("pixeltweaks.lang.not", ultraText);
+					componentList.add(nonText);
+				} else {
+					TranslationTextComponent ultraText = new TranslationTextComponent("pixeltweaks.lang.ultrabeast");
+					componentList.add(ultraText);
+				}
+			}
+			if (cachedSpec.getValue(GenerationRequirement.class).isPresent()) {
+				TranslationTextComponent newType = new TranslationTextComponent("pixeltweaks.lang.generation", cachedSpec.getValue(GenerationRequirement.class).get().intValue());
+				componentList.add(newType);
+			}
+			if (cachedSpec.getValue(TypeRequirement.class).isPresent()) {
+				TranslationTextComponent type = new TranslationTextComponent("type." + cachedSpec.getValue(TypeRequirement.class).get().getSecond().name().toLowerCase());
+				TranslationTextComponent newType = new TranslationTextComponent("pixeltweaks.lang.type", type);
+				componentList.add(newType);
+			}
 
-                    componentList.add(nonText);
-                } else {
-                    TranslationTextComponent ultraText = new TranslationTextComponent("pixeltweaks.lang.ultrabeast");
-                    componentList.add(ultraText);
-                }
-            }
-            if (cachedSpec.getValue(GenerationRequirement.class).isPresent()) {
-                TranslationTextComponent newType = new TranslationTextComponent("pixeltweaks.lang.generation",
-                        cachedSpec.getValue(GenerationRequirement.class).get().intValue());
-                componentList.add(newType);
-            }
-            if (cachedSpec.getValue(TypeRequirement.class).isPresent()) {
-                TranslationTextComponent type = new TranslationTextComponent("type." +
-                        cachedSpec.getValue(TypeRequirement.class).get().getSecond().name().toLowerCase());
-                TranslationTextComponent newType = new TranslationTextComponent("pixeltweaks.lang.type", type);
-                componentList.add(newType);
-            }
+			componentList.add(0, pokemon);
+		}
+		if (cachedSpec.getValue(FormRequirement.class).isPresent()) {
+			TranslationTextComponent form = new TranslationTextComponent("pixelmon.generic.form." + cachedSpec.getValue(FormRequirement.class).get().toLowerCase());
+			componentList.add(form);
+		}
+		if (cachedSpec.getValue(PaletteRequirement.class).isPresent()) {
+			TranslationTextComponent form = new TranslationTextComponent("pixelmon.palette." + cachedSpec.getValue(PaletteRequirement.class).get().toLowerCase());
+			componentList.add(form);
+		}
+		if (cachedSpec.getValue(GenderRequirement.class).isPresent()) {
+			TranslationTextComponent gender = new TranslationTextComponent(cachedSpec.getValue(GenderRequirement.class).get().getTranslationKey());
+			componentList.add(gender);
+		}
+		if (cachedSpec.getValue(ShinyRequirement.class).isPresent()) {
+			TranslationTextComponent shiny = new TranslationTextComponent("pixelmon.palette.shiny");
+			componentList.add(shiny);
+		}
+		if (this.cachedSpec != null && this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
+			TranslationTextComponent random = new TranslationTextComponent("pixeltweaks.lang.random");
+			componentList.add(random);
+		}
 
-            componentList.add(0, pokemon);
-        }
-        if (cachedSpec.getValue(FormRequirement.class).isPresent()) {
-            TranslationTextComponent form = new TranslationTextComponent("pixelmon.generic.form." +
-                    cachedSpec.getValue(FormRequirement.class).get().toLowerCase());
-            componentList.add(form);
-        }
-        if (cachedSpec.getValue(PaletteRequirement.class).isPresent()) {
-            TranslationTextComponent form = new TranslationTextComponent("pixelmon.palette." +
-                    cachedSpec.getValue(PaletteRequirement.class).get().toLowerCase());
-            componentList.add(form);
-        }
-        if (cachedSpec.getValue(GenderRequirement.class).isPresent()) {
-            TranslationTextComponent gender = new TranslationTextComponent(cachedSpec.getValue(GenderRequirement.class).get().getTranslationKey());
-            componentList.add(gender);
-        }
-        if (cachedSpec.getValue(ShinyRequirement.class).isPresent()) {
-            TranslationTextComponent shiny = new TranslationTextComponent("pixelmon.palette.shiny");
-            componentList.add(shiny);
-        }
-        if (this.cachedSpec != null && this.cachedSpec.toString().split(" ")[0].equalsIgnoreCase("random")) {
-            TranslationTextComponent random = new TranslationTextComponent("pixeltweaks.lang.random");
-            componentList.add(random);
-        }
-
-        StringTextComponent all = new StringTextComponent("");
-        for (int i = componentList.size() - 1; i >= 0; i--) {
-            all.append(componentList.get(i));
-            if (i != 0) all.append(" ");
-        }
-        return all;
-
-    }
+		StringTextComponent all = new StringTextComponent("");
+		for (int i = componentList.size() - 1; i >= 0; i--) {
+			all.append(componentList.get(i));
+			if (i != 0) all.append(" ");
+		}
+		return all;
+	}
 }

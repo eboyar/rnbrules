@@ -106,7 +106,7 @@ public class NPCInteractionListener {
 
 		if (entityData.contains("Underpass") && entityData.getBoolean("Underpass")) {
 			GlobalOTManager globalot = GlobalOTManager.get(player.getLevel());
-			if (!globalot.playerHasGlobalOT(player.getUUID(), "underpass")){
+			if (!globalot.playerHasGlobalOT(player.getUUID(), "underpass")) {
 				event.setCanceled(true);
 				UnderpassGui.openGui(player);
 			}

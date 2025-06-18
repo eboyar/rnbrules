@@ -12,9 +12,7 @@ import ethan.hoenn.rnbrules.utils.managers.HiddenMachineManager;
 import ethan.hoenn.rnbrules.utils.managers.LevelCapManager;
 import ethan.hoenn.rnbrules.utils.managers.SafariManager;
 import ethan.hoenn.rnbrules.utils.misc.Flags;
-
 import java.util.UUID;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -154,6 +152,5 @@ public class CatchListener {
 		pokemon.removeFlag(Flags.NEEDS_WATERFALL);
 
 		pokemon.getPersistentData().remove("NeedsSpawnPoint");
-
 	}
 }

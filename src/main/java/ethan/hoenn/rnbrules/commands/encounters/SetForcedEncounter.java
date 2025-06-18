@@ -13,24 +13,23 @@ public class SetForcedEncounter {
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(
-				Commands.literal("setforcedencounter")
-						.requires(source -> source.hasPermission(2))
-						.then(Commands.argument("entity", EntityArgument.entity())
-								.then(Commands.argument("encounterID", StringArgumentType.string())
-										.executes(context -> {
-											Entity target = EntityArgument.getEntity(context, "entity");
-											String encounterID = StringArgumentType.getString(context, "encounterID");
+			Commands.literal("setforcedencounter")
+				.requires(source -> source.hasPermission(2))
+				.then(
+					Commands.argument("entity", EntityArgument.entity()).then(
+						Commands.argument("encounterID", StringArgumentType.string()).executes(context -> {
+							Entity target = EntityArgument.getEntity(context, "entity");
+							String encounterID = StringArgumentType.getString(context, "encounterID");
 
-											CompoundNBT persistentData = target.getPersistentData();
-											persistentData.putString("ForcedEncounter", encounterID);
+							CompoundNBT persistentData = target.getPersistentData();
+							persistentData.putString("ForcedEncounter", encounterID);
 
-											context.getSource().sendSuccess(
-													new StringTextComponent("Set ForcedEncounter to '" + encounterID + "' on entity: " + target.getName().getString()),
-													true
-											);
+							context.getSource().sendSuccess(new StringTextComponent("Set ForcedEncounter to '" + encounterID + "' on entity: " + target.getName().getString()), true);
 
-											return 1;
-										})))
+							return 1;
+						})
+					)
+				)
 		);
 	}
 }

@@ -21,34 +21,25 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 
 public class Progression {
+
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
-		dispatcher.register(Commands.literal("progression")
+		dispatcher.register(
+			Commands.literal("progression")
 				.requires(source -> source.hasPermission(4))
-				.then(Commands.literal("reset")
-						.then(Commands.argument("player", EntityArgument.player())
-								.executes(Progression::executeReset)
-						)
+				.then(Commands.literal("reset").then(Commands.argument("player", EntityArgument.player()).executes(Progression::executeReset)))
+				.then(
+					Commands.literal("rank").then(
+						Commands.argument("player", EntityArgument.player()).then(Commands.argument("rank", StringArgumentType.string()).suggests(Progression::suggestRanks).executes(Progression::executeSetRank))
+					)
 				)
-				.then(Commands.literal("rank")
-						.then(Commands.argument("player", EntityArgument.player())
-								.then(Commands.argument("rank", StringArgumentType.string())
-										.suggests(Progression::suggestRanks)
-										.executes(Progression::executeSetRank)
-								)
+				.then(
+					Commands.literal("staff")
+						.then(
+							Commands.argument("player", EntityArgument.player()).then(
+								Commands.argument("staffrank", StringArgumentType.string()).suggests(Progression::suggestStaffRanks).executes(Progression::executeSetStaffRank)
+							)
 						)
-				)				
-				.then(Commands.literal("staff")
-						.then(Commands.argument("player", EntityArgument.player())
-								.then(Commands.argument("staffrank", StringArgumentType.string())
-										.suggests(Progression::suggestStaffRanks)
-										.executes(Progression::executeSetStaffRank)
-								)
-						)
-						.then(Commands.literal("remove")
-								.then(Commands.argument("player", EntityArgument.player())
-										.executes(Progression::executeRemoveStaffRank)
-								)
-						)
+						.then(Commands.literal("remove").then(Commands.argument("player", EntityArgument.player()).executes(Progression::executeRemoveStaffRank)))
 				)
 		);
 	}
@@ -72,15 +63,10 @@ public class Progression {
 				}
 			}
 
-			source.sendSuccess(new StringTextComponent(
-					String.format("§7Reset data in §e%d§7 out of §e%d§7 managers",
-							mwd, resetResults.size())
-			), false);
+			source.sendSuccess(new StringTextComponent(String.format("§7Reset data in §e%d§7 out of §e%d§7 managers", mwd, resetResults.size())), false);
 
 			if (targetPlayer.isAlive()) {
-				targetPlayer.connection.disconnect(new StringTextComponent(
-						"§cYour progression data has been reset by an administrator."
-				));
+				targetPlayer.connection.disconnect(new StringTextComponent("§cYour progression data has been reset by an administrator."));
 			}
 
 			return 1;
@@ -92,7 +78,6 @@ public class Progression {
 	}
 
 	private static CompletableFuture<Suggestions> suggestRanks(CommandContext<CommandSource> context, SuggestionsBuilder builder) {
-		
 		builder.suggest(Rank.NEWCOMER.getId());
 		builder.suggest(Rank.NOVICE.getId());
 		builder.suggest(Rank.ROOKIE.getId());
@@ -107,11 +92,11 @@ public class Progression {
 	}
 
 	private static CompletableFuture<Suggestions> suggestStaffRanks(CommandContext<CommandSource> context, SuggestionsBuilder builder) {
-		
 		builder.suggest(StaffRank.STAFF.getId());
 		builder.suggest(StaffRank.ADMIN.getId());
 		return builder.buildFuture();
 	}
+
 	private static int executeSetRank(CommandContext<CommandSource> context) throws CommandSyntaxException {
 		CommandSource source = context.getSource();
 		ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(context, "player");
@@ -119,21 +104,18 @@ public class Progression {
 		UUID playerUUID = targetPlayer.getUUID();
 		String playerName = targetPlayer.getName().getString();
 
-		
 		Rank rank = findRankById(rankId);
 		if (rank == null) {
 			source.sendFailure(new StringTextComponent("§cUnknown rank: " + rankId));
 			return 0;
-		}		try {
+		}
+		try {
 			ProgressionManager.get().setPlayerRank(playerUUID, rank);
-			
-			
+
 			PlayerListHandler.updatePlayerRankDisplay(targetPlayer);
-			
-			source.sendSuccess(new StringTextComponent(
-				"§aSet rank for §e" + playerName + "§a to §r" + rank.getFormattedPrefix()
-			), true);
-			
+
+			source.sendSuccess(new StringTextComponent("§aSet rank for §e" + playerName + "§a to §r" + rank.getFormattedPrefix()), true);
+
 			return 1;
 		} catch (Exception e) {
 			source.sendFailure(new StringTextComponent("§cFailed to set rank: " + e.getMessage()));
@@ -141,6 +123,7 @@ public class Progression {
 			return 0;
 		}
 	}
+
 	private static int executeSetStaffRank(CommandContext<CommandSource> context) throws CommandSyntaxException {
 		CommandSource source = context.getSource();
 		ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(context, "player");
@@ -148,28 +131,22 @@ public class Progression {
 		UUID playerUUID = targetPlayer.getUUID();
 		String playerName = targetPlayer.getName().getString();
 
-		
 		StaffRank staffRank = findStaffRankById(staffRankId);
 		if (staffRank == null) {
 			source.sendFailure(new StringTextComponent("§cUnknown staff rank: " + staffRankId));
 			return 0;
-		}		try {
+		}
+		try {
 			ProgressionManager.get().setPlayerStaffRank(playerUUID, staffRank);
-			
-			
+
 			PlayerListHandler.updatePlayerRankDisplay(targetPlayer);
-			
-			source.sendSuccess(new StringTextComponent(
-				"§aSet staff rank for §e" + playerName + "§a to §r" + staffRank.getNameColor() + staffRank.getDisplayName()
-			), true);
-			
-			
+
+			source.sendSuccess(new StringTextComponent("§aSet staff rank for §e" + playerName + "§a to §r" + staffRank.getNameColor() + staffRank.getDisplayName()), true);
+
 			if (targetPlayer.isAlive()) {
-				targetPlayer.sendMessage(new StringTextComponent(
-					"§aYour staff rank has been set to §r" + staffRank.getNameColor() + staffRank.getDisplayName()
-				), targetPlayer.getUUID());
+				targetPlayer.sendMessage(new StringTextComponent("§aYour staff rank has been set to §r" + staffRank.getNameColor() + staffRank.getDisplayName()), targetPlayer.getUUID());
 			}
-			
+
 			return 1;
 		} catch (Exception e) {
 			source.sendFailure(new StringTextComponent("§cFailed to set staff rank: " + e.getMessage()));
@@ -177,31 +154,28 @@ public class Progression {
 			return 0;
 		}
 	}
+
 	private static int executeRemoveStaffRank(CommandContext<CommandSource> context) throws CommandSyntaxException {
 		CommandSource source = context.getSource();
 		ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(context, "player");
 		UUID playerUUID = targetPlayer.getUUID();
-		String playerName = targetPlayer.getName().getString();try {
+		String playerName = targetPlayer.getName().getString();
+		try {
 			StaffRank currentRank = ProgressionManager.get().getPlayerStaffRankObject(playerUUID);
 			if (currentRank == null) {
 				source.sendFailure(new StringTextComponent("§e" + playerName + "§c does not have a staff rank to remove."));
 				return 0;
-			}			ProgressionManager.get().removePlayerStaffRank(playerUUID);
-			
-			
-			PlayerListHandler.updatePlayerRankDisplay(targetPlayer);
-			
-			source.sendSuccess(new StringTextComponent(
-				"§aRemoved staff rank §r" + currentRank.getNameColor() + currentRank.getDisplayName() + "§a from §e" + playerName
-			), true);
-			
-			
-			if (targetPlayer.isAlive()) {
-				targetPlayer.sendMessage(new StringTextComponent(
-					"§cYour staff rank has been removed."
-				), targetPlayer.getUUID());
 			}
-			
+			ProgressionManager.get().removePlayerStaffRank(playerUUID);
+
+			PlayerListHandler.updatePlayerRankDisplay(targetPlayer);
+
+			source.sendSuccess(new StringTextComponent("§aRemoved staff rank §r" + currentRank.getNameColor() + currentRank.getDisplayName() + "§a from §e" + playerName), true);
+
+			if (targetPlayer.isAlive()) {
+				targetPlayer.sendMessage(new StringTextComponent("§cYour staff rank has been removed."), targetPlayer.getUUID());
+			}
+
 			return 1;
 		} catch (Exception e) {
 			source.sendFailure(new StringTextComponent("§cFailed to remove staff rank: " + e.getMessage()));

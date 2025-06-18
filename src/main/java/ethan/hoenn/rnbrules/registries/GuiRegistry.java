@@ -118,9 +118,8 @@ public class GuiRegistry {
 		() -> IForgeContainerType.create((windowId, inv, data) -> new IntriguingStoneExchangeGui.IntriguingStoneExchangeContainer(windowId, inv))
 	);
 
-	public static final RegistryObject<ContainerType<UnderpassGui.UnderpassContainer>> UNDERPASS_CONTAINER = CONTAINERS.register(
-		"underpass_container",
-		() -> IForgeContainerType.create((windowId, inv, data) -> new UnderpassGui.UnderpassContainer(windowId, inv))
+	public static final RegistryObject<ContainerType<UnderpassGui.UnderpassContainer>> UNDERPASS_CONTAINER = CONTAINERS.register("underpass_container", () ->
+		IForgeContainerType.create((windowId, inv, data) -> new UnderpassGui.UnderpassContainer(windowId, inv))
 	);
 
 	public static final ResourceLocation SELECT_27 = new ResourceLocation(MOD_ID, "textures/gui/select_27.png");

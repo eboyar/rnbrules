@@ -1,13 +1,5 @@
 package ethan.hoenn.rnbrules.gui.fossils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.pixelmonmod.api.pokemon.PokemonSpecification;
 import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
 import com.pixelmonmod.pixelmon.api.economy.BankAccount;
@@ -17,10 +9,13 @@ import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.enums.items.EnumFossils;
 import com.pixelmonmod.pixelmon.items.CoveredFossilItem;
-
 import ethan.hoenn.rnbrules.RNBConfig;
 import ethan.hoenn.rnbrules.registries.GuiRegistry;
 import ethan.hoenn.rnbrules.utils.managers.GlobalOTManager;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -42,6 +37,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("NullableProblems")
 public class FossilGui {
@@ -95,9 +92,7 @@ public class FossilGui {
 		}
 
 		try {
-			BankAccount userAccount = (BankAccount) BankAccountProxy.getBankAccount(
-				player
-			).orElseThrow(() -> new NullPointerException("bank account"));
+			BankAccount userAccount = (BankAccount) BankAccountProxy.getBankAccount(player).orElseThrow(() -> new NullPointerException("bank account"));
 
 			double balance = userAccount.getBalance().doubleValue();
 			final int FOSSIL_COST = 3000;
@@ -179,11 +174,7 @@ public class FossilGui {
 		processButton.getOrCreateTag().putBoolean("HideTooltip", false);
 		ListNBT loreList = new ListNBT();
 		loreList.add(
-			StringNBT.valueOf(
-				ITextComponent.Serializer.toJson(
-					new StringTextComponent("Cost: ").withStyle(TextFormatting.GRAY).append(new StringTextComponent("₽3,000").withStyle(TextFormatting.GOLD))
-				)
-			)
+			StringNBT.valueOf(ITextComponent.Serializer.toJson(new StringTextComponent("Cost: ").withStyle(TextFormatting.GRAY).append(new StringTextComponent("₽3,000").withStyle(TextFormatting.GOLD))))
 		);
 
 		CompoundNBT display = processButton.getOrCreateTagElement("display");

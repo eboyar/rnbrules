@@ -23,14 +23,12 @@ public class BattleUtils {
 		this.debugMode = debugMode;
 	}
 
-	
 	public static boolean isPokemonFaster(PixelmonWrapper pw, PixelmonWrapper target) {
 		if (pw.bc.globalStatusController.getGlobalStatuses().stream().anyMatch(status -> status instanceof TrickRoom)) {
 			return (pw.getBattleStats().getStatWithMod(BattleStatsType.SPEED) <= target.getBattleStats().getStatWithMod(BattleStatsType.SPEED));
 		} else return (pw.getBattleStats().getStatWithMod(BattleStatsType.SPEED) >= target.getBattleStats().getStatWithMod(BattleStatsType.SPEED));
 	}
 
-	
 	public static boolean isLastPokemonAlive(PixelmonWrapper pw, BattleParticipant participant) {
 		int alivePokemon = 0;
 		for (PixelmonWrapper teammate : participant.controlledPokemon) {
@@ -41,7 +39,6 @@ public class BattleUtils {
 		return alivePokemon <= 1;
 	}
 
-	
 	public static boolean isIncapacitated(PixelmonWrapper pw) {
 		boolean isFrozen = pw.getStatuses().stream().anyMatch(status -> status instanceof Freeze);
 		boolean hasFrozenCure = pw
@@ -71,7 +68,6 @@ public class BattleUtils {
 		return isAsleep || isRecharging || hasTruant;
 	}
 
-	
 	public static boolean wouldBeTwoHitKOd(PixelmonWrapper defender, PixelmonWrapper attacker) {
 		int maxDamagePerHit = 0;
 
@@ -109,7 +105,6 @@ public class BattleUtils {
 		return maxDamagePerHit >= defender.getHealth() / 2;
 	}
 
-	
 	public static boolean wouldBeKOdThisTurn(PixelmonWrapper pw) {
 		boolean hasSturdy = pw.getAbility() instanceof Sturdy;
 		boolean hasFocusSash = pw.hasHeldItem() && pw.getHeldItem().getHeldItemType() == com.pixelmonmod.pixelmon.enums.heldItems.EnumHeldItems.focussash && pw.getHealthPercent() == 1.0f;
@@ -155,7 +150,6 @@ public class BattleUtils {
 		return false;
 	}
 
-	
 	public static boolean isAtRiskOfBeingKOd(PixelmonWrapper pw, PixelmonWrapper opponent, BattleController bc) {
 		if (isPokemonFaster(pw, opponent)) {
 			return false;
@@ -196,7 +190,6 @@ public class BattleUtils {
 		return atRisk;
 	}
 
-	
 	public static boolean wouldDieToSecondaryDamage(PixelmonWrapper pokemon, GlobalStatusController gsc) {
 		int health = pokemon.getHealth();
 		int totalDamage = 0;
@@ -231,7 +224,6 @@ public class BattleUtils {
 		return totalDamage >= health;
 	}
 
-	
 	public static int estimateMaxDamage(PixelmonWrapper attacker, PixelmonWrapper defender) {
 		int maxDamage = 0;
 
@@ -273,7 +265,6 @@ public class BattleUtils {
 		return maxDamage;
 	}
 
-	
 	public static int estimateMaxDamageOfMove(Attack attack, PixelmonWrapper attacker, PixelmonWrapper defender) {
 		int maxDamage = 0;
 
@@ -309,7 +300,6 @@ public class BattleUtils {
 		return maxDamage;
 	}
 
-	
 	public static boolean isHighestDamagingMove(PixelmonWrapper pw, Attack attack) {
 		int maxDamage = 0;
 		int attackDamage = 0;
@@ -358,7 +348,6 @@ public class BattleUtils {
 		return attackDamage >= maxDamage;
 	}
 
-	
 	public static boolean doesOpponentHaveStatus(PixelmonWrapper pw, Class<? extends StatusBase> statusClass) {
 		if (pw.getOpponentPokemon().isEmpty()) {
 			return false;
@@ -374,7 +363,6 @@ public class BattleUtils {
 		return false;
 	}
 
-	
 	public static int getOpponentSpikeLayer(PixelmonWrapper pw) {
 		if (pw.getOpponentPokemon().isEmpty()) {
 			return 0;
@@ -389,7 +377,6 @@ public class BattleUtils {
 		return 0;
 	}
 
-	
 	public static int getOpponentToxicSpikeLayer(PixelmonWrapper pw) {
 		if (pw.getOpponentPokemon().isEmpty()) {
 			return 0;
@@ -404,7 +391,6 @@ public class BattleUtils {
 		return 0;
 	}
 
-	
 	public static boolean hasOpponentTeamMostlyGrounded(PixelmonWrapper pw) {
 		int groundedCount = 0;
 		int totalCount = 0;
@@ -421,7 +407,6 @@ public class BattleUtils {
 		return groundedCount > (totalCount / 2);
 	}
 
-	
 	public static boolean hasOpponentTeamMostlyPoisonOrSteel(PixelmonWrapper pw) {
 		int poisonOrSteelCount = 0;
 		int totalCount = 0;
@@ -438,7 +423,6 @@ public class BattleUtils {
 		return poisonOrSteelCount > (totalCount / 2);
 	}
 
-	
 	public static boolean isOpponentTeamWeakToRock(PixelmonWrapper pw) {
 		int rockWeakCount = 0;
 		int totalCount = 0;
@@ -461,7 +445,6 @@ public class BattleUtils {
 		return rockWeakCount > (totalCount / 3);
 	}
 
-	
 	public static boolean checkSpeedAdvantageAfterParalysis(PixelmonWrapper pw, PixelmonWrapper target) {
 		int aiSpeed = pw.getBattleStats().getStatWithMod(com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType.SPEED);
 		int targetSpeed = target.getBattleStats().getStatWithMod(com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType.SPEED);
@@ -475,7 +458,6 @@ public class BattleUtils {
 		return false;
 	}
 
-	
 	public static boolean hasOpponentTeamHighSpeed(PixelmonWrapper pw) {
 		int highSpeedCount = 0;
 		int totalCount = 0;
@@ -496,27 +478,22 @@ public class BattleUtils {
 		return highSpeedCount > (totalCount / 2);
 	}
 
-	
 	public static boolean isImmuneToGroundHazards(PixelmonWrapper pw) {
 		return (pw.type.contains(com.pixelmonmod.pixelmon.api.pokemon.Element.FLYING) || pw.getAbility().getLocalizedName().equals("Levitate"));
 	}
 
-	
 	public static boolean isFirstTurn(PixelmonWrapper pw) {
 		return pw.isFirstTurn();
 	}
 
-	
 	public static boolean isDoubleBattle(BattleController bc) {
 		return bc.participants.size() > 2;
 	}
 
-	
 	public static int getMaxDamageRoll(MoveResults result) {
 		return (int) Math.ceil(result.damage * (1.0f / 0.925f));
 	}
 
-	
 	public static boolean couldKnockOut(MoveResults result, PixelmonWrapper target) {
 		int maxPossibleDamage = getMaxDamageRoll(result);
 		return maxPossibleDamage >= target.getHealth();

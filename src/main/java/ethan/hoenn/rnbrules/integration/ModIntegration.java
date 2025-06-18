@@ -1,4 +1,5 @@
 package ethan.hoenn.rnbrules.integration;
+
 import ethan.hoenn.rnbrules.integration.ftbquests.PokemonRewardTypes;
 import ethan.hoenn.rnbrules.integration.ftbquests.PokemonTaskTypes;
 import ethan.hoenn.rnbrules.integration.ftbquests.TaskListener;

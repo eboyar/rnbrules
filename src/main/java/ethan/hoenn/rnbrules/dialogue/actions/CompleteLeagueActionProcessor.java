@@ -23,23 +23,22 @@ public class CompleteLeagueActionProcessor implements DialogueActionProcessor {
 						DialogueNPCManager dialogueManager = DialogueNPCManager.get();
 						ServerWorld world = (ServerWorld) player.level;
 						LeagueManager leagueManager = LeagueManager.get(world);
-	
+
 						DialogueNPCManager.ActiveDialogueData activeDialogue = dialogueManager.getActiveDialogue(player.getUUID());
 						if (activeDialogue != null) {
 							UUID npcUUID = activeDialogue.getNpcUUID();
-							
+
 							UUID originalUUID = leagueManager.getOriginalTrainerUUID(npcUUID);
-							if (originalUUID != null && leagueManager.isLeagueMember(originalUUID)) { 
+							if (originalUUID != null && leagueManager.isLeagueMember(originalUUID)) {
 								leagueManager.markLeagueDialogueCompleted(player.getUUID(), originalUUID);
-								
+
 								boolean completed = dialogueManager.completeDialogue(player);
-								
+
 								LeagueManager.LeagueMember leagueMember = LeagueManager.getLeagueMemberFromUUID(originalUUID);
-								
+
 								if (leagueMember != null) {
 									Entity entity = world.getEntity(npcUUID);
 									if (entity instanceof NPCTrainer) {
-										
 										leagueManager.startLeagueBattle(player, (NPCTrainer) entity);
 									}
 								}
@@ -49,7 +48,7 @@ public class CompleteLeagueActionProcessor implements DialogueActionProcessor {
 								}
 							} else {
 								System.err.println("COMPLETE_LEAGUE action used on non-league member NPC: " + npcUUID + " for player " + player.getName().getString());
-								
+
 								dialogueManager.completeDialogue(player);
 							}
 						} else {

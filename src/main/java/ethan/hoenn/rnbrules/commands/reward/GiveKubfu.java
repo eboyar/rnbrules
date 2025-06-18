@@ -17,23 +17,23 @@ public class GiveKubfu {
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(
-				Commands.literal("givekubfu")
-						.requires(source -> source.hasPermission(2))
-						.then(
-								Commands.argument("player", EntityArgument.player()).executes(context -> {
-									ServerPlayerEntity player = EntityArgument.getPlayer(context, "player");
+			Commands.literal("givekubfu")
+				.requires(source -> source.hasPermission(2))
+				.then(
+					Commands.argument("player", EntityArgument.player()).executes(context -> {
+						ServerPlayerEntity player = EntityArgument.getPlayer(context, "player");
 
-									Pokemon pokemon = KUBFU_SPEC.create();
+						Pokemon pokemon = KUBFU_SPEC.create();
 
-									if (BattleRegistry.getBattle(player) != null) {
-										StorageProxy.getPCForPlayer(player.getUUID()).add(pokemon);
-									} else {
-										StorageProxy.getParty(player.getUUID()).add(pokemon);
-									}
+						if (BattleRegistry.getBattle(player) != null) {
+							StorageProxy.getPCForPlayer(player.getUUID()).add(pokemon);
+						} else {
+							StorageProxy.getParty(player.getUUID()).add(pokemon);
+						}
 
-									return 1;
-								})
-						)
+						return 1;
+					})
+				)
 		);
 	}
 }

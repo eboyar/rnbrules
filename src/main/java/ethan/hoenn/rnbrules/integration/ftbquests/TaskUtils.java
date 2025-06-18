@@ -7,18 +7,16 @@ package ethan.hoenn.rnbrules.integration.ftbquests;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.quest.TeamData;
 import ethan.hoenn.rnbrules.integration.tasks.PokeDollarsTask;
-import net.minecraft.client.Minecraft;
-
 import java.math.BigDecimal;
+import net.minecraft.client.Minecraft;
 
 public class TaskUtils {
 
-    public static void updateClientPokedollars(BigDecimal amount) {
-        TeamData data = ClientQuestFile.INSTANCE.getData(Minecraft.getInstance().player);
+	public static void updateClientPokedollars(BigDecimal amount) {
+		TeamData data = ClientQuestFile.INSTANCE.getData(Minecraft.getInstance().player);
 
-        ClientQuestFile.INSTANCE.collect(PokeDollarsTask.class).forEach(task -> {
-            data.setProgress(task, amount.intValue());
-        });
-
-    }
+		ClientQuestFile.INSTANCE.collect(PokeDollarsTask.class).forEach(task -> {
+			data.setProgress(task, amount.intValue());
+		});
+	}
 }

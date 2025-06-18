@@ -1,12 +1,5 @@
 package ethan.hoenn.rnbrules.utils.managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import com.pixelmonmod.pixelmon.api.economy.BankAccount;
 import com.pixelmonmod.pixelmon.api.economy.BankAccountProxy;
 import com.pixelmonmod.pixelmon.api.pokedex.PlayerPokedex;
@@ -16,6 +9,12 @@ import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import ethan.hoenn.rnbrules.multiplayer.Rank;
 import ethan.hoenn.rnbrules.multiplayer.StaffRank;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -54,76 +53,63 @@ public class ProgressionManager extends WorldSavedData {
 		return instance;
 	}
 
-
 	public static List<ResetableManager> getAllResetableManagers(ServerWorld world) {
 		List<ResetableManager> managers = new ArrayList<>();
-
 
 		BadgeManager badgeManager = BadgeManager.get(world);
 		if (badgeManager != null) {
 			managers.add(badgeManager);
 		}
 
-
 		StatueVisibilityManager statueManager = StatueVisibilityManager.get(world);
 		if (statueManager != null) {
 			managers.add(statueManager);
 		}
-
 
 		StarterSelectionManager starterManager = StarterSelectionManager.get(world);
 		if (starterManager != null) {
 			managers.add(starterManager);
 		}
 
-
 		LevelCapManager levelCapManager = LevelCapManager.get(world);
 		if (levelCapManager != null) {
 			managers.add(levelCapManager);
 		}
-
 
 		HiddenMachineManager hmManager = HiddenMachineManager.get(world);
 		if (hmManager != null) {
 			managers.add(hmManager);
 		}
 
-
 		GlobalOTManager otManager = GlobalOTManager.get(world);
 		if (otManager != null) {
 			managers.add(otManager);
 		}
-
 
 		GauntletManager gauntletManager = GauntletManager.get(world);
 		if (gauntletManager != null) {
 			managers.add(gauntletManager);
 		}
 
-
 		FlyManager flyManager = FlyManager.get(world);
 		if (flyManager != null) {
 			managers.add(flyManager);
 		}
-
 
 		FerryManager ferryManager = FerryManager.get(world);
 		if (ferryManager != null) {
 			managers.add(ferryManager);
 		}
 
-
 		BattleDependencyManager battleDepManager = BattleDependencyManager.get(world);
 		if (battleDepManager != null) {
 			managers.add(battleDepManager);
 		}
 
-
 		SafariManager safariManager = SafariManager.get(world);
 		if (safariManager != null) {
 			managers.add(safariManager);
 		}
-
 
 		LeagueManager leagueManager = LeagueManager.get(world);
 		if (leagueManager != null) {
@@ -155,9 +141,7 @@ public class ProgressionManager extends WorldSavedData {
 		return resetResults;
 	}
 
-
 	public static Map<String, Boolean> globalResetPlayerData(ServerWorld world, UUID playerUUID) {
-
 		List<ResetableManager> managers = getAllResetableManagers(world);
 
 		Map<String, Boolean> resetResults = resetPlayerData(managers, playerUUID);
@@ -171,26 +155,21 @@ public class ProgressionManager extends WorldSavedData {
 				hadProgressionData = true;
 			}
 
-
 			if (OTRewardClaimers.remove(playerUUID) != null) {
 				hadProgressionData = true;
 			}
-
 
 			if (defeatedTrainers.remove(playerUUID) != null) {
 				hadProgressionData = true;
 			}
 
-
 			if (gauntletDefeatedTrainers.remove(playerUUID) != null) {
 				hadProgressionData = true;
 			}
 
-
 			if (playerActiveGauntlets.remove(playerUUID) != null) {
 				hadProgressionData = true;
 			}
-
 
 			if (claimedPokeChests.remove(playerUUID) != null) {
 				hadProgressionData = true;
@@ -234,13 +213,10 @@ public class ProgressionManager extends WorldSavedData {
 		return resetResults;
 	}
 
-
 	public void markDialogueCompleted(UUID playerUUID, UUID npcUUID, String dialogueId) {
 		if (dialogueId == null || dialogueId.isEmpty()) return;
 
-		completedDialogues.computeIfAbsent(playerUUID, k -> new HashMap<>())
-				.computeIfAbsent(npcUUID, k -> new ArrayList<>())
-				.add(dialogueId);
+		completedDialogues.computeIfAbsent(playerUUID, k -> new HashMap<>()).computeIfAbsent(npcUUID, k -> new ArrayList<>()).add(dialogueId);
 
 		this.setDirty();
 	}
@@ -255,7 +231,6 @@ public class ProgressionManager extends WorldSavedData {
 		return npcDialogues != null && npcDialogues.contains(dialogueId);
 	}
 
-
 	public void markRewardClaimed(UUID playerUUID, UUID npcUUID) {
 		OTRewardClaimers.computeIfAbsent(playerUUID, k -> new HashSet<>()).add(npcUUID);
 		this.setDirty();
@@ -265,7 +240,6 @@ public class ProgressionManager extends WorldSavedData {
 		HashSet<UUID> claimedNpcs = OTRewardClaimers.get(playerUUID);
 		return claimedNpcs != null && claimedNpcs.contains(npcUUID);
 	}
-
 
 	public void markTrainerDefeated(UUID playerUUID, UUID trainerUUID) {
 		defeatedTrainers.computeIfAbsent(playerUUID, k -> new HashSet<>()).add(trainerUUID);
@@ -277,7 +251,6 @@ public class ProgressionManager extends WorldSavedData {
 		return defeated != null && defeated.contains(trainerUUID);
 	}
 
-
 	public boolean removeDefeatedTrainer(UUID playerUUID, UUID trainerUUID) {
 		HashSet<UUID> defeated = defeatedTrainers.get(playerUUID);
 		if (defeated != null && defeated.remove(trainerUUID)) {
@@ -286,7 +259,6 @@ public class ProgressionManager extends WorldSavedData {
 		}
 		return false;
 	}
-
 
 	public void markTempTrainerDefeated(UUID playerUUID, UUID trainerUUID) {
 		gauntletDefeatedTrainers.computeIfAbsent(playerUUID, k -> new HashSet<>()).add(trainerUUID);
@@ -313,25 +285,21 @@ public class ProgressionManager extends WorldSavedData {
 		this.setDirty();
 	}
 
-
 	public void startGauntlet(UUID playerUUID, String gauntletId) {
 		playerActiveGauntlets.put(playerUUID, gauntletId);
 		gauntletDefeatedTrainers.remove(playerUUID);
 		this.setDirty();
 	}
 
-
 	public void markGauntletTrainerDefeated(UUID playerUUID, UUID trainerUUID) {
 		gauntletDefeatedTrainers.computeIfAbsent(playerUUID, k -> new HashSet<>()).add(trainerUUID);
 		this.setDirty();
 	}
 
-
 	public boolean hasGauntletTrainerBeenDefeated(UUID playerUUID, UUID trainerUUID) {
 		HashSet<UUID> defeated = gauntletDefeatedTrainers.get(playerUUID);
 		return defeated != null && defeated.contains(trainerUUID);
 	}
-
 
 	public boolean removeGauntletTrainerDefeated(UUID playerUUID, UUID trainerUUID) {
 		HashSet<UUID> defeated = gauntletDefeatedTrainers.get(playerUUID);
@@ -342,21 +310,17 @@ public class ProgressionManager extends WorldSavedData {
 		return false;
 	}
 
-
 	public void completeGauntletSuccessfully(UUID playerUUID) {
 		HashSet<UUID> tempDefeated = gauntletDefeatedTrainers.get(playerUUID);
 		if (tempDefeated != null && !tempDefeated.isEmpty()) {
-
 			HashSet<UUID> permanent = defeatedTrainers.computeIfAbsent(playerUUID, k -> new HashSet<>());
 			permanent.addAll(tempDefeated);
 		}
-
 
 		gauntletDefeatedTrainers.remove(playerUUID);
 		playerActiveGauntlets.remove(playerUUID);
 		this.setDirty();
 	}
-
 
 	public void failGauntlet(UUID playerUUID) {
 		gauntletDefeatedTrainers.remove(playerUUID);
@@ -364,16 +328,13 @@ public class ProgressionManager extends WorldSavedData {
 		this.setDirty();
 	}
 
-
 	public boolean isInGauntlet(UUID playerUUID) {
 		return playerActiveGauntlets.containsKey(playerUUID);
 	}
 
-
 	public String getActiveGauntletId(UUID playerUUID) {
 		return playerActiveGauntlets.get(playerUUID);
 	}
-
 
 	public void markPokeChestClaimed(UUID playerUUID, String chestId) {
 		claimedPokeChests.computeIfAbsent(playerUUID, k -> new HashSet<>()).add(chestId);
@@ -406,12 +367,14 @@ public class ProgressionManager extends WorldSavedData {
 
 	public String getPlayerRank(UUID playerUUID) {
 		return playerRanks.get(playerUUID);
-	}	public Rank getPlayerRankObject(UUID playerUUID) {
+	}
+
+	public Rank getPlayerRankObject(UUID playerUUID) {
 		String rankId = playerRanks.get(playerUUID);
 		if (rankId == null) {
 			return Rank.NEWCOMER;
 		}
-		
+
 		switch (rankId) {
 			case "newcomer":
 				return Rank.NEWCOMER;
@@ -443,7 +406,6 @@ public class ProgressionManager extends WorldSavedData {
 		this.setDirty();
 	}
 
-	
 	public void setPlayerStaffRank(UUID playerUUID, String staffRankId) {
 		playerStaffRanks.put(playerUUID, staffRankId);
 		this.setDirty();
@@ -456,9 +418,9 @@ public class ProgressionManager extends WorldSavedData {
 	public StaffRank getPlayerStaffRankObject(UUID playerUUID) {
 		String staffRankId = playerStaffRanks.get(playerUUID);
 		if (staffRankId == null) {
-			return null; 
+			return null;
 		}
-		
+
 		switch (staffRankId) {
 			case "staff":
 				return StaffRank.STAFF;
@@ -485,7 +447,6 @@ public class ProgressionManager extends WorldSavedData {
 
 	@Override
 	public void load(CompoundNBT nbt) {
-
 		completedDialogues.clear();
 		OTRewardClaimers.clear();
 		defeatedTrainers.clear();
@@ -494,7 +455,6 @@ public class ProgressionManager extends WorldSavedData {
 		claimedPokeChests.clear();
 		playerRanks.clear();
 		playerStaffRanks.clear();
-
 
 		if (nbt.contains("CompletedDialogues")) {
 			CompoundNBT dialoguesNBT = nbt.getCompound("CompletedDialogues");
@@ -520,7 +480,6 @@ public class ProgressionManager extends WorldSavedData {
 			}
 		}
 
-
 		if (nbt.contains("OTRewardClaimers")) {
 			CompoundNBT claimersNBT = nbt.getCompound("OTRewardClaimers");
 
@@ -537,7 +496,6 @@ public class ProgressionManager extends WorldSavedData {
 			}
 		}
 
-
 		if (nbt.contains("DefeatedTrainers")) {
 			CompoundNBT trainersNBT = nbt.getCompound("DefeatedTrainers");
 
@@ -552,7 +510,6 @@ public class ProgressionManager extends WorldSavedData {
 				}
 			}
 		}
-
 
 		if (nbt.contains("TempGauntletDefeatedTrainers")) {
 			CompoundNBT tempTrainersNBT = nbt.getCompound("TempGauntletDefeatedTrainers");
@@ -570,7 +527,6 @@ public class ProgressionManager extends WorldSavedData {
 			}
 		}
 
-
 		if (nbt.contains("PlayerActiveGauntlets")) {
 			CompoundNBT activeGauntletsNBT = nbt.getCompound("PlayerActiveGauntlets");
 
@@ -580,7 +536,6 @@ public class ProgressionManager extends WorldSavedData {
 				playerActiveGauntlets.put(playerUUID, gauntletId);
 			}
 		}
-
 
 		if (nbt.contains("ClaimedPokeChests")) {
 			CompoundNBT chestsNBT = nbt.getCompound("ClaimedPokeChests");
@@ -625,7 +580,6 @@ public class ProgressionManager extends WorldSavedData {
 
 	@Override
 	public CompoundNBT save(CompoundNBT nbt) {
-
 		CompoundNBT dialoguesNBT = new CompoundNBT();
 
 		for (Map.Entry<UUID, HashMap<UUID, List<String>>> playerEntry : completedDialogues.entrySet()) {
@@ -646,7 +600,6 @@ public class ProgressionManager extends WorldSavedData {
 
 		nbt.put("CompletedDialogues", dialoguesNBT);
 
-
 		CompoundNBT claimersNBT = new CompoundNBT();
 
 		for (Map.Entry<UUID, HashSet<UUID>> playerEntry : OTRewardClaimers.entrySet()) {
@@ -661,7 +614,6 @@ public class ProgressionManager extends WorldSavedData {
 
 		nbt.put("OTRewardClaimers", claimersNBT);
 
-
 		CompoundNBT trainersNBT = new CompoundNBT();
 
 		for (Map.Entry<UUID, HashSet<UUID>> playerEntry : defeatedTrainers.entrySet()) {
@@ -674,7 +626,6 @@ public class ProgressionManager extends WorldSavedData {
 			trainersNBT.put(playerEntry.getKey().toString(), defeatedTrainersNBT);
 		}
 		nbt.put("DefeatedTrainers", trainersNBT);
-
 
 		CompoundNBT tempTrainersNBT = new CompoundNBT();
 
@@ -690,7 +641,6 @@ public class ProgressionManager extends WorldSavedData {
 
 		nbt.put("TempGauntletDefeatedTrainers", tempTrainersNBT);
 
-
 		CompoundNBT activeGauntletsNBT = new CompoundNBT();
 
 		for (Map.Entry<UUID, String> entry : playerActiveGauntlets.entrySet()) {
@@ -698,7 +648,6 @@ public class ProgressionManager extends WorldSavedData {
 		}
 
 		nbt.put("PlayerActiveGauntlets", activeGauntletsNBT);
-
 
 		CompoundNBT chestsNBT = new CompoundNBT();
 		for (Map.Entry<UUID, HashSet<String>> playerEntry : claimedPokeChests.entrySet()) {

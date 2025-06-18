@@ -92,7 +92,6 @@ public class RNBRules {
 
 		new Gamerules();
 		ModIntegration.registerFTBQuestsIntegration();
-
 	}
 
 	private void doClientStuff(final FMLClientSetupEvent event) {

@@ -53,20 +53,20 @@ public class ParticleRegistry {
 		Minecraft.getInstance().particleEngine.register(SANDSTORM_LIGHT.get(), sprite -> new SandstormParticle.Factory(sprite, false, false));
 		Minecraft.getInstance().particleEngine.register(SANDSTORM_MEDIUM.get(), sprite -> new SandstormParticle.Factory(sprite, true, false));
 		Minecraft.getInstance().particleEngine.register(SANDSTORM_DARK.get(), sprite -> new SandstormParticle.Factory(sprite, true, true));
-		Minecraft.getInstance().particleEngine.register(MAGMA_HARDENED.get(), sprite -> new MagmaStormParticle.Factory(sprite, 0)); 
-		Minecraft.getInstance().particleEngine.register(MAGMA_SUPERCOOL.get(), sprite -> new MagmaStormParticle.Factory(sprite, 1)); 
-		Minecraft.getInstance().particleEngine.register(MAGMA_COOL.get(), sprite -> new MagmaStormParticle.Factory(sprite, 2)); 
-		Minecraft.getInstance().particleEngine.register(MAGMA_HOT.get(), sprite -> new MagmaStormParticle.Factory(sprite, 3)); 
-		Minecraft.getInstance().particleEngine.register(MAGMA_SUPERHOT.get(), sprite -> new MagmaStormParticle.Factory(sprite, 4)); 
-		Minecraft.getInstance().particleEngine.register(WIND_NORMAL.get(), sprite -> new WindParticle.Factory(sprite, false, false)); 
-		Minecraft.getInstance().particleEngine.register(WIND_NORMAL_ANIM.get(), sprite -> new WindParticle.Factory(sprite, true, false)); 
-		Minecraft.getInstance().particleEngine.register(WIND_MYSTIC.get(), sprite -> new WindParticle.Factory(sprite, false, true)); 
-		Minecraft.getInstance().particleEngine.register(WIND_MYSTIC_ANIM.get(), sprite -> new WindParticle.Factory(sprite, true, true)); 
-		Minecraft.getInstance().particleEngine.register(FROST_ROCK.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 0, false, false)); 
-		Minecraft.getInstance().particleEngine.register(FROST_ROCK_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 1, true, false)); 
-		Minecraft.getInstance().particleEngine.register(SNOW_STAR.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 2, false, false)); 
-		Minecraft.getInstance().particleEngine.register(GLOWSTONE_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 3, true, false)); 
-		Minecraft.getInstance().particleEngine.register(FROST_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 4, true, false)); 
-		Minecraft.getInstance().particleEngine.register(FROST_STAR.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 5, false, false)); 
+		Minecraft.getInstance().particleEngine.register(MAGMA_HARDENED.get(), sprite -> new MagmaStormParticle.Factory(sprite, 0));
+		Minecraft.getInstance().particleEngine.register(MAGMA_SUPERCOOL.get(), sprite -> new MagmaStormParticle.Factory(sprite, 1));
+		Minecraft.getInstance().particleEngine.register(MAGMA_COOL.get(), sprite -> new MagmaStormParticle.Factory(sprite, 2));
+		Minecraft.getInstance().particleEngine.register(MAGMA_HOT.get(), sprite -> new MagmaStormParticle.Factory(sprite, 3));
+		Minecraft.getInstance().particleEngine.register(MAGMA_SUPERHOT.get(), sprite -> new MagmaStormParticle.Factory(sprite, 4));
+		Minecraft.getInstance().particleEngine.register(WIND_NORMAL.get(), sprite -> new WindParticle.Factory(sprite, false, false));
+		Minecraft.getInstance().particleEngine.register(WIND_NORMAL_ANIM.get(), sprite -> new WindParticle.Factory(sprite, true, false));
+		Minecraft.getInstance().particleEngine.register(WIND_MYSTIC.get(), sprite -> new WindParticle.Factory(sprite, false, true));
+		Minecraft.getInstance().particleEngine.register(WIND_MYSTIC_ANIM.get(), sprite -> new WindParticle.Factory(sprite, true, true));
+		Minecraft.getInstance().particleEngine.register(FROST_ROCK.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 0, false, false));
+		Minecraft.getInstance().particleEngine.register(FROST_ROCK_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 1, true, false));
+		Minecraft.getInstance().particleEngine.register(SNOW_STAR.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 2, false, false));
+		Minecraft.getInstance().particleEngine.register(GLOWSTONE_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 3, true, false));
+		Minecraft.getInstance().particleEngine.register(FROST_LIGHT.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 4, true, false));
+		Minecraft.getInstance().particleEngine.register(FROST_STAR.get(), sprite -> new AuroraVeilParticle.Factory(sprite, 5, false, false));
 	}
 }

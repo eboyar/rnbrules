@@ -11,7 +11,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class StatueVisibilityManager extends WorldSavedData implements ResetableManager{
+public class StatueVisibilityManager extends WorldSavedData implements ResetableManager {
 
 	private static final String DATA_TAG = "statue_visibility";
 	private static final String PLAYER_ENTRIES_TAG = "player_statue_visibility";

@@ -9,25 +9,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DesolateLand.class)
 public class CustomDesolateLand {
-    
-    
-    @Inject(method = "applySwitchOutEffect", at = @At("HEAD"), cancellable = true, remap = false)
-    private void preventSwitchOutRemoval(PixelmonWrapper oldPokemon, CallbackInfo ci) {
-        
-        ci.cancel();
-    }
-    
-    
-    @Inject(method = "onAbilityLost", at = @At("HEAD"), cancellable = true, remap = false)  
-    private void preventAbilityLostRemoval(PixelmonWrapper pokemon, CallbackInfo ci) {
-        
-        ci.cancel();
-    }
-    
-    
-    @Inject(method = "checkForRemoval", at = @At("HEAD"), cancellable = true, remap = false)
-    private void preventRemoval(PixelmonWrapper pokemon, CallbackInfo ci) {
-        
-        ci.cancel();
-    }
+
+	@Inject(method = "applySwitchOutEffect", at = @At("HEAD"), cancellable = true, remap = false)
+	private void preventSwitchOutRemoval(PixelmonWrapper oldPokemon, CallbackInfo ci) {
+		ci.cancel();
+	}
+
+	@Inject(method = "onAbilityLost", at = @At("HEAD"), cancellable = true, remap = false)
+	private void preventAbilityLostRemoval(PixelmonWrapper pokemon, CallbackInfo ci) {
+		ci.cancel();
+	}
+
+	@Inject(method = "checkForRemoval", at = @At("HEAD"), cancellable = true, remap = false)
+	private void preventRemoval(PixelmonWrapper pokemon, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

@@ -10,7 +10,6 @@ import ethan.hoenn.rnbrules.registries.GuiRegistry;
 import ethan.hoenn.rnbrules.utils.enums.Badge;
 import ethan.hoenn.rnbrules.utils.managers.BadgeManager;
 import ethan.hoenn.rnbrules.utils.managers.GlobalOTManager;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

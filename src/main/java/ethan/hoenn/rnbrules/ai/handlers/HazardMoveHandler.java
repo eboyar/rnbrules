@@ -44,8 +44,6 @@ public class HazardMoveHandler {
 	}
 
 	public boolean handleMove(PixelmonWrapper pw, MoveChoice choice) {
-
-
 		Attack attack = choice.attack;
 
 		if (attack.getActualMove().isAttack(AttackRegistry.STEALTH_ROCK)) {

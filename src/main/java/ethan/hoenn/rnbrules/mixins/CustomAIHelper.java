@@ -19,13 +19,8 @@ public class CustomAIHelper {
 	int i;
 
 	@Inject(
-			method = "initGroundAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V",
-					ordinal = 1,
-					shift = At.Shift.BEFORE
-			)
+		method = "initGroundAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 1, shift = At.Shift.BEFORE)
 	)
 	private void injectGroundReturnToSpawnGoal(PixelmonEntity entity, GoalSelector tasks, CallbackInfo ci) {
 		int needsSpawnPoint = entity.getPokemon().getPersistentData().getInt("NeedsSpawnPoint");
@@ -35,13 +30,8 @@ public class CustomAIHelper {
 	}
 
 	@Inject(
-			method = "initSwimmingAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V",
-					ordinal = 0,
-					shift = At.Shift.BEFORE
-			)
+		method = "initSwimmingAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 0, shift = At.Shift.BEFORE)
 	)
 	private void injectSwimToSpawnGoal(PixelmonEntity entity, GoalSelector tasks, CallbackInfo ci) {
 		int needsSpawnPoint = entity.getPokemon().getPersistentData().getInt("NeedsSpawnPoint");

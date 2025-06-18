@@ -18,56 +18,56 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class WipeoutTask extends Task {
 
-    public int count;
+	public int count;
 
-    public WipeoutTask(Quest quest) {
-        super(quest);
-    }
+	public WipeoutTask(Quest quest) {
+		super(quest);
+	}
 
-    @Override
-    public TaskType getType() {
-        return PokemonTaskTypes.WIPEOUT;
-    }
+	@Override
+	public TaskType getType() {
+		return PokemonTaskTypes.WIPEOUT;
+	}
 
-    @Override
-    public long getMaxProgress() {
-        return count;
-    }
+	@Override
+	public long getMaxProgress() {
+		return count;
+	}
 
-    @Override
-    public void writeData(CompoundNBT nbt) {
-        super.writeData(nbt);
-        nbt.putInt("count", count);
-    }
+	@Override
+	public void writeData(CompoundNBT nbt) {
+		super.writeData(nbt);
+		nbt.putInt("count", count);
+	}
 
-    @Override
-    public void readNetData(PacketBuffer buffer) {
-        super.readNetData(buffer);
-        buffer.writeVarInt(count);
-    }
+	@Override
+	public void readNetData(PacketBuffer buffer) {
+		super.readNetData(buffer);
+		buffer.writeVarInt(count);
+	}
 
-    @Override
-    public void readData(CompoundNBT nbt) {
-        super.readData(nbt);
-        count = nbt.getInt("count");
-    }
+	@Override
+	public void readData(CompoundNBT nbt) {
+		super.readData(nbt);
+		count = nbt.getInt("count");
+	}
 
-    @Override
-    public void writeNetData(PacketBuffer buffer) {
-        super.writeNetData(buffer);
-        buffer.writeVarInt(count);
-    }
+	@Override
+	public void writeNetData(PacketBuffer buffer) {
+		super.writeNetData(buffer);
+		buffer.writeVarInt(count);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getConfig(ConfigGroup config) {
-        super.getConfig(config);
-        config.addInt("count", count, v -> count = v, 1, 1, Integer.MAX_VALUE);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void getConfig(ConfigGroup config) {
+		super.getConfig(config);
+		config.addInt("count", count, v -> count = v, 1, 1, Integer.MAX_VALUE);
+	}
 
-    public void onWipeout(TeamData team, ServerPlayerEntity player) {
-        if (!team.isCompleted(this) && team.file.isServerSide()) {
-            team.addProgress(this, 1L);
-        }
-    }
+	public void onWipeout(TeamData team, ServerPlayerEntity player) {
+		if (!team.isCompleted(this) && team.file.isServerSide()) {
+			team.addProgress(this, 1L);
+		}
+	}
 }

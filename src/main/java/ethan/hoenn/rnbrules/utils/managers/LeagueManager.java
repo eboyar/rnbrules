@@ -101,12 +101,10 @@ public class LeagueManager extends WorldSavedData implements ResetableManager {
 			hadData = true;
 		}
 
-		
 		if (leagueBattleCopies.remove(playerUUID) != null) {
 			hadData = true;
 		}
 
-		
 		Integer arenaToRelease = null;
 		for (Map.Entry<Integer, UUID> entry : arenasInUse.entrySet()) {
 			if (entry.getValue().equals(playerUUID)) {

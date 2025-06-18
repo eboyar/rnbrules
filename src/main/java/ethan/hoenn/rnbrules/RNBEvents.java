@@ -29,11 +29,9 @@ import ethan.hoenn.rnbrules.utils.managers.*;
 import ethan.hoenn.rnbrules.utils.misc.HungerCounter;
 import ethan.hoenn.rnbrules.utils.misc.PlayerFreezeTracker;
 import ethan.hoenn.rnbrules.utils.notifications.LocationNotifier;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.UUID;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
@@ -68,7 +66,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = {Dist.CLIENT, Dist.DEDICATED_SERVER})
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = { Dist.CLIENT, Dist.DEDICATED_SERVER })
 public class RNBEvents {
 
 	private static ServerWorld overworld = null;
@@ -162,30 +160,30 @@ public class RNBEvents {
 		Item item = itemS.getItem();
 
 		if (
-				item instanceof TechnicalMoveItem ||
-						item instanceof HMItem ||
-						item instanceof BadgeItem ||
-						item instanceof HeldItem ||
-						item instanceof PokeBagItem ||
-						item instanceof EvolutionStoneItem ||
-						item instanceof EndlessCandy ||
-						item instanceof PartyRestore ||
-						item instanceof MaxPartyRestore ||
-						item instanceof Battery ||
-						item instanceof MegaGem ||
-						item instanceof ExpCandyItem ||
-						item instanceof ValuableItem ||
-						item instanceof QuestItem ||
-						item instanceof BigBackpack ||
-						item instanceof BottlecapItem ||
-						item instanceof AbilityCapsuleItem ||
-						item instanceof AbilityPatchItem ||
-						item instanceof MintItem ||
-						item instanceof BikeItem ||
-						item instanceof GenericUpgradeItem ||
-						item instanceof GenericUpgradeComponentItem ||
-						item instanceof MaxHealingSerum ||
-						item instanceof MegaStoneItem
+			item instanceof TechnicalMoveItem ||
+			item instanceof HMItem ||
+			item instanceof BadgeItem ||
+			item instanceof HeldItem ||
+			item instanceof PokeBagItem ||
+			item instanceof EvolutionStoneItem ||
+			item instanceof EndlessCandy ||
+			item instanceof PartyRestore ||
+			item instanceof MaxPartyRestore ||
+			item instanceof Battery ||
+			item instanceof MegaGem ||
+			item instanceof ExpCandyItem ||
+			item instanceof ValuableItem ||
+			item instanceof QuestItem ||
+			item instanceof BigBackpack ||
+			item instanceof BottlecapItem ||
+			item instanceof AbilityCapsuleItem ||
+			item instanceof AbilityPatchItem ||
+			item instanceof MintItem ||
+			item instanceof BikeItem ||
+			item instanceof GenericUpgradeItem ||
+			item instanceof GenericUpgradeComponentItem ||
+			item instanceof MaxHealingSerum ||
+			item instanceof MegaStoneItem
 		) {
 			event.getEntityItem().setNoPickUpDelay();
 			event.getEntityItem().setOwner(player.getUUID());
@@ -200,30 +198,30 @@ public class RNBEvents {
 			Item item = itemS.getItem();
 
 			if (
-					item instanceof TechnicalMoveItem ||
-							item instanceof HMItem ||
-							item instanceof BadgeItem ||
-							item instanceof HeldItem ||
-							item instanceof PokeBagItem ||
-							item instanceof EvolutionStoneItem ||
-							item instanceof EndlessCandy ||
-							item instanceof PartyRestore ||
-							item instanceof MaxPartyRestore ||
-							item instanceof Battery ||
-							item instanceof MegaGem ||
-							item instanceof ExpCandyItem ||
-							item instanceof ValuableItem ||
-							item instanceof QuestItem ||
-							item instanceof BigBackpack ||
-							item instanceof BottlecapItem ||
-							item instanceof AbilityCapsuleItem ||
-							item instanceof AbilityPatchItem ||
-							item instanceof MintItem ||
-							item instanceof BikeItem ||
-							item instanceof GenericUpgradeItem ||
-							item instanceof GenericUpgradeComponentItem ||
-							item instanceof MaxHealingSerum ||
-							item instanceof MegaStoneItem
+				item instanceof TechnicalMoveItem ||
+				item instanceof HMItem ||
+				item instanceof BadgeItem ||
+				item instanceof HeldItem ||
+				item instanceof PokeBagItem ||
+				item instanceof EvolutionStoneItem ||
+				item instanceof EndlessCandy ||
+				item instanceof PartyRestore ||
+				item instanceof MaxPartyRestore ||
+				item instanceof Battery ||
+				item instanceof MegaGem ||
+				item instanceof ExpCandyItem ||
+				item instanceof ValuableItem ||
+				item instanceof QuestItem ||
+				item instanceof BigBackpack ||
+				item instanceof BottlecapItem ||
+				item instanceof AbilityCapsuleItem ||
+				item instanceof AbilityPatchItem ||
+				item instanceof MintItem ||
+				item instanceof BikeItem ||
+				item instanceof GenericUpgradeItem ||
+				item instanceof GenericUpgradeComponentItem ||
+				item instanceof MaxHealingSerum ||
+				item instanceof MegaStoneItem
 			) {
 				if (event.getOriginalEntity().getOwner() != player.getUUID()) {
 					event.setCanceled(true);

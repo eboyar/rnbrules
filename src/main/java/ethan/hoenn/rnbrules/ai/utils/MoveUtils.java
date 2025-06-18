@@ -20,7 +20,6 @@ public class MoveUtils {
 		this.debugMode = debugMode;
 	}
 
-	
 	public static boolean isTrappingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.BIND) ||
@@ -34,7 +33,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isTerrainSettingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.ELECTRIC_TERRAIN) ||
@@ -44,7 +42,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSpecialCaseDamagingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.EXPLOSION) ||
@@ -67,7 +64,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSpeedReductionMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.BULLDOZE) ||
@@ -81,34 +77,28 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSpreadSpeedReductionMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.ICY_WIND) || attack.getActualMove().isAttack(AttackRegistry.ELECTROWEB));
 	}
 
-	
 	public static boolean isAttackReductionMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.CHILLING_WATER) || attack.getActualMove().isAttack(AttackRegistry.LUNGE) || attack.getActualMove().isAttack(AttackRegistry.TROP_KICK));
 	}
 
-	
 	public static boolean isSpecialAttackReductionMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.MYSTICAL_FIRE) || attack.getActualMove().isAttack(AttackRegistry.SKITTER_SMACK) || attack.getActualMove().isAttack(AttackRegistry.SPIRIT_BREAK)
 		);
 	}
 
-	
 	public static boolean isSpreadStatReductionMove(Attack attack) {
 		return false;
 	}
 
-	
 	public static boolean isAcidSprayLike(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.ACID_SPRAY);
 	}
 
-	
 	public static boolean isDrainingMove(Attack attack) {
 		String moveName = attack.getActualMove().getAttackName();
 		return (
@@ -125,7 +115,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static float getDrainHealingFraction(Attack attack) {
 		ImmutableAttack move = attack.getActualMove();
 
@@ -149,7 +138,6 @@ public class MoveUtils {
 		return 0.5f;
 	}
 
-	
 	public static boolean isParalysisMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.THUNDER_WAVE) ||
@@ -159,7 +147,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSleepInducingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.YAWN) ||
@@ -173,7 +160,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isPoisonInducingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.TOXIC) ||
@@ -190,7 +176,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSporeMove(Attack attack) {
 		if (attack == null) return false;
 		return (
@@ -203,13 +188,11 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isPowderMove(Attack attack) {
 		if (attack == null) return false;
 		return isSporeMove(attack) || attack.getActualMove().isAttack(AttackRegistry.POWDER);
 	}
 
-	
 	public static boolean isSoundBasedMove(ImmutableAttack attack) {
 		return (
 			attack.isAttack(AttackRegistry.BOOMBURST) ||
@@ -243,7 +226,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean canCauseFlinch(ImmutableAttack attack) {
 		return (
 			attack.isAttack(AttackRegistry.FAKE_OUT) ||
@@ -271,7 +253,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean hasHighCritChance(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.AEROBLAST) ||
@@ -296,32 +277,26 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isDreamEaterMove(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.DREAM_EATER);
 	}
 
-	
 	public static boolean isNightmareMove(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.NIGHTMARE);
 	}
 
-	
 	public static boolean isSnoreMove(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.SNORE);
 	}
 
-	
 	public static boolean isSleepTalkMove(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.SLEEP_TALK);
 	}
 
-	
 	public static boolean isHexMove(Attack attack) {
 		return attack.getActualMove().isAttack(AttackRegistry.HEX);
 	}
 
-	
 	public static boolean isHazardMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.STEALTH_ROCK) ||
@@ -331,17 +306,14 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isPriorityMove(Attack attack, PixelmonWrapper user) {
 		return attack.getActualMove().getPriority(user) > 0;
 	}
 
-	
 	public static boolean isScreenMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.REFLECT) || attack.getActualMove().isAttack(AttackRegistry.LIGHT_SCREEN) || attack.getActualMove().isAttack(AttackRegistry.AURORA_VEIL));
 	}
 
-	
 	public static boolean isTypedPriorityMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.SHADOW_SNEAK) ||
@@ -355,7 +327,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isProtectMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.PROTECT) ||
@@ -367,19 +338,16 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isCounterMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.COUNTER) || attack.getActualMove().isAttack(AttackRegistry.MIRROR_COAT));
 	}
 
-	
 	public static boolean isBoomMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.EXPLOSION) || attack.getActualMove().isAttack(AttackRegistry.SELF_DESTRUCT) || attack.getActualMove().isAttack(AttackRegistry.MISTY_EXPLOSION)
 		);
 	}
 
-	
 	public static boolean isWeatherSettingMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.RAIN_DANCE) ||
@@ -390,7 +358,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isContrarySetupMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.OVERHEAT) ||
@@ -416,7 +383,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isOffensiveSetupMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.DRAGON_DANCE) ||
@@ -429,7 +395,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isDefensiveSetupMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.ACID_ARMOR) ||
@@ -442,12 +407,10 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSpeedSetupMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.AGILITY) || attack.getActualMove().isAttack(AttackRegistry.ROCK_POLISH) || attack.getActualMove().isAttack(AttackRegistry.AUTOTOMIZE));
 	}
 
-	
 	public static boolean isStandardRecoveryMove(Attack attack) {
 		return (
 			attack.getActualMove().isAttack(AttackRegistry.RECOVER) ||
@@ -459,12 +422,10 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isSunBasedRecoveryMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.MORNING_SUN) || attack.getActualMove().isAttack(AttackRegistry.SYNTHESIS) || attack.getActualMove().isAttack(AttackRegistry.MOONLIGHT));
 	}
 
-	
 	public static boolean hasFakeOut(PixelmonWrapper pokemon) {
 		if (pokemon != null && pokemon.getMoveset() != null) {
 			for (Attack attack : pokemon.getMoveset()) {
@@ -476,7 +437,6 @@ public class MoveUtils {
 		return false;
 	}
 
-	
 	public static boolean hasSleepCountermeasures(PixelmonWrapper pw) {
 		boolean hasSleepCounterMoves = false;
 		for (Attack attack : pw.getMoveset()) {
@@ -498,17 +458,14 @@ public class MoveUtils {
 		return hasSleepCounterMoves || hasSleepCuringItem || hasSleepCuringAbility || hasHydrationInRain;
 	}
 
-	
 	public static boolean isSpecialAttackSetupMove(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.TAIL_GLOW) || attack.getActualMove().isAttack(AttackRegistry.NASTY_PLOT) || attack.getActualMove().isAttack(AttackRegistry.WORK_UP));
 	}
 
-	
 	public static boolean hasSpecialBurnInteraction(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.FACADE) || attack.getActualMove().isAttack(AttackRegistry.FLARE_BLITZ));
 	}
 
-	
 	public static boolean isBlockedBySubstitute(Attack attack) {
 		return (
 			!isSoundBasedMove(attack.getActualMove()) &&
@@ -518,7 +475,6 @@ public class MoveUtils {
 		);
 	}
 
-	
 	public static boolean isUnaffectedByUnaware(Attack attack) {
 		return (attack.getActualMove().isAttack(AttackRegistry.POWER_UP_PUNCH) || attack.getActualMove().isAttack(AttackRegistry.SWORDS_DANCE) || attack.getActualMove().isAttack(AttackRegistry.HOWL));
 	}

@@ -8,7 +8,6 @@ import java.util.UUID;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +26,7 @@ public class OneTimeRewardListener {
 
 			UUID playerUUID = player.getUUID();
 			UUID npcUUID = npc.getUUID();
-			
+
 			// Check if player has already claimed this reward using the ProgressionManager
 			if (ProgressionManager.get().hasClaimedReward(playerUUID, npcUUID)) {
 				return;

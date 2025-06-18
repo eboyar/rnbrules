@@ -170,7 +170,6 @@ public class LeagueGui {
 				this.leagueInventory.setItem(13, new ItemStack(Items.LIGHT_BLUE_STAINED_GLASS_PANE));
 				this.leagueInventory.setItem(14, new ItemStack(Items.YELLOW_STAINED_GLASS_PANE));
 				this.leagueInventory.setItem(15, new ItemStack(Items.BLUE_STAINED_GLASS_PANE));
-
 			} else {
 				this.leagueInventory = leagueInventory;
 				this.playerProgress = playerProgress;

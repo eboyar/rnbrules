@@ -20,7 +20,6 @@ import com.pixelmonmod.pixelmon.api.pokemon.species.gender.GenderProperties;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import dev.ftb.mods.ftblibrary.config.ConfigFromString;
 import ethan.hoenn.rnbrules.mixins.AbstractSpecificationMixin;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,8 +70,7 @@ public class PokemonConfig extends ConfigFromString<PokemonSpecification> {
 					if (consumer != null) consumer.accept(pokemonSpecification);
 					return true;
 				}
-				if (!pokemonSpecification.getValue(SpeciesRequirement.class).isPresent()
-						|| pokemonSpecification.getValue(SpeciesRequirement.class).get().getKey().equalsIgnoreCase("MISSINGNO")) {
+				if (!pokemonSpecification.getValue(SpeciesRequirement.class).isPresent() || pokemonSpecification.getValue(SpeciesRequirement.class).get().getKey().equalsIgnoreCase("MISSINGNO")) {
 					return false;
 				}
 			}
@@ -82,7 +80,7 @@ public class PokemonConfig extends ConfigFromString<PokemonSpecification> {
 				toMatch--;
 			}
 
-			List<Requirement<?,?,?>> requirements = ((AbstractSpecificationMixin)pokemonSpecification).getRequirements();
+			List<Requirement<?, ?, ?>> requirements = ((AbstractSpecificationMixin) pokemonSpecification).getRequirements();
 			if (requirements.size() != toMatch) { //A quick match to see if some spec requirement was missed or not parsed at all
 				return false;
 			}
@@ -102,9 +100,9 @@ public class PokemonConfig extends ConfigFromString<PokemonSpecification> {
 
 	public boolean isCorrect(Requirement<?, ?, ?> requirement, PokemonSpecification s) {
 		if (requirement instanceof SpeciesRequirement) {
-			return ((SpeciesRequirement)requirement).getValue().getValue().isPresent();
+			return ((SpeciesRequirement) requirement).getValue().getValue().isPresent();
 		} else if (requirement instanceof TypeRequirement) { //Types will parse to Normal type if the type isn't valid. So we manually check
-			int place = ((TypeRequirement)requirement).getValue().getFirst();
+			int place = ((TypeRequirement) requirement).getValue().getFirst();
 			String stringPlace = "type:";
 			if (place != -1) stringPlace = "type" + place + ":";
 
@@ -115,45 +113,60 @@ public class PokemonConfig extends ConfigFromString<PokemonSpecification> {
 
 			return Element.hasType(type.toUpperCase());
 		} else if (requirement instanceof FormRequirement) {
-			String form = ((FormRequirement)requirement).getValue().equalsIgnoreCase("none") //Default form
-					? "" : ((FormRequirement)requirement).getValue();
+			String form = ((FormRequirement) requirement).getValue().equalsIgnoreCase("none") //Default form
+				? ""
+				: ((FormRequirement) requirement).getValue();
 
 			//If they specified a species, check if that species has the form
 			if (s.getValue(SpeciesRequirement.class).isPresent() && !s.toString().split(" ")[0].equalsIgnoreCase("random")) {
 				return form.equals("base") || form.equals("none") || s.getValue(SpeciesRequirement.class).get().getValue().get().hasForm(form);
 			}
 			//Otherwise, check if any pokemon has the form
-			return PixelmonSpecies.getAll().stream() //Within all pokemon
-					.anyMatch(species -> species.hasForm(form));
+			return PixelmonSpecies.getAll()
+				.stream() //Within all pokemon
+				.anyMatch(species -> species.hasForm(form));
 		} else if (requirement instanceof PaletteRequirement) {
 			if (s.getValue(SpeciesRequirement.class).isPresent() && !s.toString().split(" ")[0].equalsIgnoreCase("random")) {
 				Species species = s.getValue(SpeciesRequirement.class).get().getValue().get();
 
 				//We use a cache system since typing will do this every character, and this is quite the stream filter
 				if (!CACHE.containsKey(species.getDex())) {
-					CACHE.put(species.getDex(), species.getForms().stream() //Within all forms
-							.map(Stats::getGenderProperties).flatMap(Collection::stream) //Within all genders
-							.map(GenderProperties::getPalettes).flatMap(Arrays::stream) //Within all palettes
+					CACHE.put(
+						species.getDex(),
+						species
+							.getForms()
+							.stream() //Within all forms
+							.map(Stats::getGenderProperties)
+							.flatMap(Collection::stream) //Within all genders
+							.map(GenderProperties::getPalettes)
+							.flatMap(Arrays::stream) //Within all palettes
 							.map(palette -> palette.getName().toLowerCase()) //Cache the names of all the palettes
-							.collect(Collectors.toSet()));
+							.collect(Collectors.toSet())
+					);
 				}
 
-				return CACHE.get(species.getDex()).contains(((PaletteRequirement)requirement).getValue().toLowerCase()); //Check if it exists
+				return CACHE.get(species.getDex()).contains(((PaletteRequirement) requirement).getValue().toLowerCase()); //Check if it exists
 			} else {
 				if (!CACHE.containsKey(-1)) {
-					CACHE.put(-1, PixelmonSpecies.getAll().stream() //Within all pokemon
-							.map(Species::getForms).flatMap(Collection::stream) //Within all forms
-							.map(Stats::getGenderProperties).flatMap(Collection::stream) //Within all genders
-							.map(GenderProperties::getPalettes).flatMap(Arrays::stream) //Within all palettes
+					CACHE.put(
+						-1,
+						PixelmonSpecies.getAll()
+							.stream() //Within all pokemon
+							.map(Species::getForms)
+							.flatMap(Collection::stream) //Within all forms
+							.map(Stats::getGenderProperties)
+							.flatMap(Collection::stream) //Within all genders
+							.map(GenderProperties::getPalettes)
+							.flatMap(Arrays::stream) //Within all palettes
 							.map(palette -> palette.getName().toLowerCase()) //Cache the names of all the palettes
-							.collect(Collectors.toSet()));
+							.collect(Collectors.toSet())
+					);
 				}
-				return CACHE.get(-1).contains(((PaletteRequirement)requirement).getValue().toLowerCase()); //Check if it exists
+				return CACHE.get(-1).contains(((PaletteRequirement) requirement).getValue().toLowerCase()); //Check if it exists
 			}
 		} else if (requirement instanceof BossRequirement) {
-			return ((BossRequirement)requirement).getValue() != null && BossTierRegistry.getBossTier(((BossRequirement)requirement).getValue()).isPresent();
+			return ((BossRequirement) requirement).getValue() != null && BossTierRegistry.getBossTier(((BossRequirement) requirement).getValue()).isPresent();
 		}
 		return requirement.fits(s.toString()) && requirement.getValue() != null;
 	}
 }
-

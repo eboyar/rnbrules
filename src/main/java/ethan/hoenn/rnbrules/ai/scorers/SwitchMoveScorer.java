@@ -42,24 +42,20 @@ public class SwitchMoveScorer {
 			return null;
 		}
 
-		
 		if (isDoubleBattle(pw.bc)) {
 			return checkPerishSongSwitch(pw, choices);
 		}
 
-		
 		UUID perishSwitch = checkPerishSongSwitch(pw, choices);
 		if (perishSwitch != null) {
 			return perishSwitch;
 		}
 
-		
 		if (pw.getHealthPercent() < 0.5f) {
 			debugLog("AI health below 50%, not switching");
 			return null;
 		}
 
-		
 		boolean allMovesNegative = true;
 		for (MoveChoice choice : attackChoices) {
 			if (choice.weight >= 0.0f) {
@@ -73,16 +69,14 @@ public class SwitchMoveScorer {
 			return null;
 		}
 
-		
 		List<PixelmonWrapper> opponents = pw.getOpponentPokemon();
 		if (opponents.isEmpty()) {
 			return null;
 		}
 		PixelmonWrapper opponent = opponents.get(0);
 
-		
 		List<UUID> validCandidates = new ArrayList<>();
-		
+
 		for (UUID partyUUID : choices) {
 			if (isValidSwitchCandidate(pw, partyUUID, opponent)) {
 				validCandidates.add(partyUUID);
@@ -94,10 +88,9 @@ public class SwitchMoveScorer {
 			return null;
 		}
 
-		
 		if (random.nextFloat() < 0.5f) {
 			debugLog("Hard switch triggered - all moves negative, valid candidates available");
-			
+
 			return mustSwitch(pw, validCandidates);
 		}
 
@@ -130,7 +123,6 @@ public class SwitchMoveScorer {
 				PixelmonWrapper switchPokemon = pw.doSwitch();
 
 				if (this.validateSwitch(switchPokemon)) {
-					
 					SwitchUtils.applyStatModifications(switchPokemon, pw.getStatuses(), bc, debugMode);
 
 					float matchupScore;
@@ -305,7 +297,6 @@ public class SwitchMoveScorer {
 	}
 
 	private UUID checkPerishSongSwitch(PixelmonWrapper pw, List<UUID> choices) {
-		
 		Perish perishStatus = null;
 		for (StatusBase status : pw.getStatuses()) {
 			if (status instanceof Perish) {
@@ -316,7 +307,7 @@ public class SwitchMoveScorer {
 
 		if (perishStatus != null) {
 			debugLog("Perish Song detected with " + perishStatus.effectTurns + " turns remaining");
-			
+
 			if (perishStatus.effectTurns <= 1) {
 				debugLog("Perish Song switch triggered (1 turn or less remaining)");
 				return mustSwitch(pw, choices);
@@ -332,7 +323,6 @@ public class SwitchMoveScorer {
 		bc.simulateMode = true;
 
 		try {
-			
 			currentPokemon.newPokemonUUID = candidateUUID;
 			PixelmonWrapper candidate = currentPokemon.doSwitch();
 
@@ -340,53 +330,45 @@ public class SwitchMoveScorer {
 				return false;
 			}
 
-			
 			SwitchUtils.applyStatModifications(candidate, currentPokemon.getStatuses(), bc, debugMode);
 
 			boolean candidateIsFaster = isPokemonFaster(candidate, opponent);
 			int opponentDamageToCandidate = calculateMaxDamage(opponent, candidate);
-			
+
 			if (candidateIsFaster) {
-				
 				boolean wouldBeOHKO = opponentDamageToCandidate >= candidate.getHealth();
 				debugLog("Candidate " + candidate.getSpecies().getLocalizedName() + " is faster. OHKO check: " + wouldBeOHKO + " (damage: " + opponentDamageToCandidate + "/" + candidate.getHealth() + ")");
 				return !wouldBeOHKO;
 			} else {
-				
 				boolean wouldBe2HKO = opponentDamageToCandidate * 2 >= candidate.getHealth();
-				debugLog("Candidate " + candidate.getSpecies().getLocalizedName() + " is slower. 2HKO check: " + wouldBe2HKO + " (2x damage: " + (opponentDamageToCandidate * 2) + "/" + candidate.getHealth() + ")");
+				debugLog(
+					"Candidate " + candidate.getSpecies().getLocalizedName() + " is slower. 2HKO check: " + wouldBe2HKO + " (2x damage: " + (opponentDamageToCandidate * 2) + "/" + candidate.getHealth() + ")"
+				);
 				return !wouldBe2HKO;
 			}
-
 		} finally {
-			
 			this.resetSwitchSimulation(currentPokemon, currentPokemon.getControlledIndex(), currentPokemon, currentPokemon.getParticipant());
 			bc.simulateMode = originalSimulateMode;
 		}
 	}
 
-	
 	public boolean shouldConsiderSwitching(PixelmonWrapper pw, List<UUID> choices, List<MoveChoice> attackChoices) {
 		if (choices == null || choices.isEmpty()) {
 			return false;
 		}
 
-		
 		if (isDoubleBattle(pw.bc)) {
 			return hasPerishSongSwitch(pw, choices);
 		}
 
-		
 		if (hasPerishSongSwitch(pw, choices)) {
 			return true;
 		}
 
-		
 		if (pw.getHealthPercent() < 0.5f) {
 			return false;
 		}
 
-		
 		boolean allMovesNegative = true;
 		for (MoveChoice choice : attackChoices) {
 			if (choice.weight >= 0.0f) {
@@ -399,22 +381,19 @@ public class SwitchMoveScorer {
 			return false;
 		}
 
-		
 		List<UUID> validCandidates = getValidSwitchCandidates(pw, choices);
 		return !validCandidates.isEmpty();
 	}
 
-	
 	public List<UUID> getValidSwitchCandidates(PixelmonWrapper pw, List<UUID> choices) {
 		List<UUID> validCandidates = new ArrayList<>();
 
-		
 		List<PixelmonWrapper> opponents = pw.getOpponentPokemon();
 		if (opponents.isEmpty()) {
 			return validCandidates;
 		}
 		PixelmonWrapper opponent = opponents.get(0);
-		
+
 		for (UUID partyUUID : choices) {
 			if (isValidSwitchCandidate(pw, partyUUID, opponent)) {
 				validCandidates.add(partyUUID);
@@ -424,7 +403,6 @@ public class SwitchMoveScorer {
 		return validCandidates;
 	}
 
-	
 	private boolean hasPerishSongSwitch(PixelmonWrapper pw, List<UUID> choices) {
 		return checkPerishSongSwitch(pw, choices) != null;
 	}

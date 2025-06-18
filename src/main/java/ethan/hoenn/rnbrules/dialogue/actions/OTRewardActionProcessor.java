@@ -54,9 +54,9 @@ public class OTRewardActionProcessor implements DialogueActionProcessor {
 						if (!data.contains("RewardItem")) {
 							return;
 						}
-						
+
 						UUID npcUUID = npc.getUUID();
-						
+
 						// Check if the player has already claimed this reward using the ProgressionManager
 						if (ProgressionManager.get().hasClaimedReward(playerUUID, npcUUID)) {
 							player.sendMessage(new StringTextComponent("§cYou have already received this reward."), playerUUID);

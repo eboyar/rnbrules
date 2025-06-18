@@ -5,7 +5,6 @@ import com.pixelmonmod.pixelmon.api.economy.BankAccountProxy;
 import ethan.hoenn.rnbrules.utils.data.dialog.DialogueActionData;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;

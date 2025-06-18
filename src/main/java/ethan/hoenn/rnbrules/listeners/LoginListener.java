@@ -48,7 +48,6 @@ public class LoginListener {
 			try {
 				String processedCommand = command.replace("@pl", playerName);
 				server.getCommands().performCommand(server.createCommandSourceStack(), processedCommand);
-
 			} catch (Exception e) {
 				System.err.println("Failed to execute first join command: " + command);
 				e.printStackTrace();

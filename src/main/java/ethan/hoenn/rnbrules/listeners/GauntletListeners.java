@@ -121,7 +121,6 @@ public class GauntletListeners {
 			return;
 		}
 
-		
 		pm.markGauntletTrainerDefeated(playerUUID, originalTrainerUUID);
 
 		List<Boolean> currentProgress = gm.getGauntletProgress(playerUUID, gauntletName);
@@ -143,8 +142,7 @@ public class GauntletListeners {
 
 			boolean shouldGiveDeathlessReward = wasDeathless;
 			gm.removeGauntlet(playerUUID, gauntletName);
-			
-			
+
 			pm.completeGauntletSuccessfully(playerUUID);
 
 			if (hasNextGauntlet) {
@@ -245,12 +243,12 @@ public class GauntletListeners {
 									resetEncounterData(playerUUID, parentGauntletId, serverWorld);
 
 									gm.removeGauntlet(playerUUID, currentGauntletId);
-									
+
 									pm.failGauntlet(playerUUID);
 								} else {
 									resetEncounterData(playerUUID, currentGauntletId, serverWorld);
 									gm.removeGauntlet(playerUUID, currentGauntletId);
-									
+
 									pm.failGauntlet(playerUUID);
 								}
 							}
@@ -291,16 +289,14 @@ public class GauntletListeners {
 
 		List<String> trainerUUIDs = gauntlets.get(gauntletName);
 
-		
 		pm.clearTempDefeatedTrainers(playerUUID);
-		
-		
+
 		for (String trainerUUIDString : trainerUUIDs) {
 			try {
 				UUID trainerUUID = UUID.fromString(trainerUUIDString);
-				
+
 				pm.removeDefeatedTrainer(playerUUID, trainerUUID);
-				
+
 				Entity entity = world.getEntity(trainerUUID);
 				if (entity instanceof NPCTrainer) {
 					NPCTrainer trainer = (NPCTrainer) entity;
@@ -315,22 +311,19 @@ public class GauntletListeners {
 	private static void handleLinkedPairedTrainers(NPCTrainer trainer, UUID playerUUID, ServerWorld world, ProgressionManager pm) {
 		CompoundNBT persistentData = trainer.getPersistentData();
 
-		
-		
-		
 		if (persistentData.contains("Linked")) {
 			UUID linkedTrainerUUID = persistentData.getUUID("Linked");
-			
+
 			pm.removeGauntletTrainerDefeated(playerUUID, linkedTrainerUUID);
-			
+
 			pm.removeDefeatedTrainer(playerUUID, linkedTrainerUUID);
 		}
 
 		if (persistentData.contains("Paired")) {
 			UUID pairedTrainerUUID = persistentData.getUUID("Paired");
-			
+
 			pm.removeGauntletTrainerDefeated(playerUUID, pairedTrainerUUID);
-			
+
 			pm.removeDefeatedTrainer(playerUUID, pairedTrainerUUID);
 		}
 	}

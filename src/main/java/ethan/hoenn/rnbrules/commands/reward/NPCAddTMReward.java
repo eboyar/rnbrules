@@ -42,11 +42,9 @@ public class NPCAddTMReward {
 
 		NPCTrainer trainer = (NPCTrainer) entity;
 
-		
 		CompoundNBT entityNBT = new CompoundNBT();
 		entity.save(entityNBT);
 
-		
 		CompoundNBT winningsTag;
 		if (entityNBT.contains("WinningsTag")) {
 			winningsTag = entityNBT.getCompound("WinningsTag");
@@ -54,7 +52,6 @@ public class NPCAddTMReward {
 			winningsTag = new CompoundNBT();
 		}
 
-		
 		int nextSlot = 0;
 		while (winningsTag.contains("item" + nextSlot)) {
 			nextSlot++;
@@ -65,7 +62,6 @@ public class NPCAddTMReward {
 			}
 		}
 
-		
 		CompoundNBT tmItem = new CompoundNBT();
 		tmItem.putString("id", "pixelmon:tm_gen" + tmGen);
 		tmItem.putByte("Count", (byte) 1);
@@ -76,11 +72,9 @@ public class NPCAddTMReward {
 
 		tmItem.put("tag", tmTag);
 
-		
 		winningsTag.put("item" + nextSlot, tmItem);
 		entityNBT.put("WinningsTag", winningsTag);
 
-		
 		entity.load(entityNBT);
 
 		String tmName = "TM" + tmNum;

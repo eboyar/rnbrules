@@ -45,16 +45,15 @@ public class BattleDependencyListener {
 					event.setCanceled(true);
 
 					PacketHandler.INSTANCE.sendTo(
-							new CancelTeamSelectionPacket("§7To battle §9" + trainerName + "§7, you must §6" + missingDescription + "§7 first."),
-							player.connection.getConnection(),
-							net.minecraftforge.fml.network.NetworkDirection.PLAY_TO_CLIENT
+						new CancelTeamSelectionPacket("§7To battle §9" + trainerName + "§7, you must §6" + missingDescription + "§7 first."),
+						player.connection.getConnection(),
+						net.minecraftforge.fml.network.NetworkDirection.PLAY_TO_CLIENT
 					);
 					return;
 				}
 			}
 		}
 	}
-
 
 	/*
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

@@ -28,7 +28,7 @@ public class ClientEnvironmentController {
 
 	private static final ClientEnvironmentController INSTANCE = new ClientEnvironmentController();
 	private final Map<Environment, BaseEnvironment> environmentInstances;
-	
+
 	private static Environment currentClientEnvironment = Environment.NONE;
 	private Environment previousClientEnvironment = Environment.NONE;
 	private float transitionProgress = 0.0f;

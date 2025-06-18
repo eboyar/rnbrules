@@ -10,7 +10,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
-public class LevelCapManager extends WorldSavedData implements ResetableManager{
+public class LevelCapManager extends WorldSavedData implements ResetableManager {
 
 	private static final String DATA_TAG = "levelcaps";
 	private static LevelCapManager instance;

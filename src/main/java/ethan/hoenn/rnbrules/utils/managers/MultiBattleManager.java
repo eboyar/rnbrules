@@ -7,12 +7,10 @@ import com.pixelmonmod.pixelmon.api.pokemon.PokemonBuilder;
 import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
-
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import com.pixelmonmod.pixelmon.enums.EnumMegaItemsUnlocked;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +23,6 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.server.ServerWorld;
@@ -173,11 +170,11 @@ public class MultiBattleManager {
 
 		if (entity instanceof NPCTrainer) {
 			ProgressionManager pm = ProgressionManager.get();
-			
+
 			// Check if this trainer is part of a gauntlet
 			GauntletManager gm = GauntletManager.get(world);
 			String gauntletId = gm.findGauntletForTrainerWithPartners(trainerUUID.toString(), world);
-			
+
 			if (gauntletId != null && pm.isInGauntlet(playerUUID)) {
 				// If this is a gauntlet trainer and the player is in a gauntlet,
 				// mark as temporary defeat - the GauntletListeners will handle promotion to permanent

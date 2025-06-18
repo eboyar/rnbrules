@@ -13,18 +13,18 @@ import ethan.hoenn.rnbrules.integration.ftbquests.PokemonTaskTypes;
 
 public class TradeTask extends PokemonTask {
 
-    public TradeTask(Quest q) {
-        super(q);
-    }
+	public TradeTask(Quest q) {
+		super(q);
+	}
 
-    @Override
-    public TaskType getType() {
-        return PokemonTaskTypes.TRADE_POKEMON;
-    }
+	@Override
+	public TaskType getType() {
+		return PokemonTaskTypes.TRADE_POKEMON;
+	}
 
-    public void tradePokemon(TeamData team, Pokemon pokemon) {
-        if (!team.isCompleted(this) && (this.cachedSpec == null || this.cachedSpec.matches(pokemon) != this.invert)) {
-            team.addProgress(this, 1L);
-        }
-    }
+	public void tradePokemon(TeamData team, Pokemon pokemon) {
+		if (!team.isCompleted(this) && (this.cachedSpec == null || this.cachedSpec.matches(pokemon) != this.invert)) {
+			team.addProgress(this, 1L);
+		}
+	}
 }

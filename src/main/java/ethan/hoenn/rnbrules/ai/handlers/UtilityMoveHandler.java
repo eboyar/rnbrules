@@ -28,8 +28,8 @@ public class UtilityMoveHandler {
 	private static final float SCORE_SCREENS_RELEVANT_MOVES_BONUS = 1.0f;
 	private static final float SCREENS_BONUS_CHANCE = 0.5f;
 	private static final float SCORE_SCREENS_ALREADY_ACTIVE = -20.0f;
-	
-	// Aurora Veil 
+
+	// Aurora Veil
 	private static final float SCORE_AURORA_VEIL_WITH_HAIL = 8.0f;
 	private static final float SCORE_AURORA_VEIL_WITHOUT_HAIL = -20.0f;
 	private static final float SCORE_AURORA_VEIL_BOTH_MOVES_BONUS = 2.0f;
@@ -216,10 +216,9 @@ public class UtilityMoveHandler {
 	@SuppressWarnings("SameReturnValue")
 	private boolean handleAuroraVeilScoring(PixelmonWrapper pw, MoveChoice choice) {
 		String moveName = choice.attack.getActualMove().getAttackName();
-		
-		boolean isHailOrSnow = pw.bc.globalStatusController.getWeather() instanceof Hail || 
-				pw.bc.globalStatusController.getWeather() instanceof Snow;
-		
+
+		boolean isHailOrSnow = pw.bc.globalStatusController.getWeather() instanceof Hail || pw.bc.globalStatusController.getWeather() instanceof Snow;
+
 		if (!isHailOrSnow) {
 			choice.weight = SCORE_AURORA_VEIL_WITHOUT_HAIL;
 			debugLog(moveName + " scoring (no hail/snow): " + SCORE_AURORA_VEIL_WITHOUT_HAIL);
@@ -231,7 +230,7 @@ public class UtilityMoveHandler {
 
 		boolean hasPhysicalMoves = false;
 		boolean hasSpecialMoves = false;
-		
+
 		for (PixelmonWrapper opponent : pw.getOpponentPokemon()) {
 			if (hasPhysicalAttackingMoves(opponent)) {
 				hasPhysicalMoves = true;

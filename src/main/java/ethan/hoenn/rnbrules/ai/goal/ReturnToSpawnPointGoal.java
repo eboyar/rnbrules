@@ -2,11 +2,12 @@ package ethan.hoenn.rnbrules.ai.goal;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import ethan.hoenn.rnbrules.utils.misc.SpawnPointHelper;
+import java.util.EnumSet;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import java.util.EnumSet;
 
 public class ReturnToSpawnPointGoal extends Goal {
+
 	private final PixelmonEntity pixelmon;
 	private final double speed;
 	private final int maxDistanceSquared;

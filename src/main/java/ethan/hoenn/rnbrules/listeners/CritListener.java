@@ -6,7 +6,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class CritListener {
 
 	@SubscribeEvent
-	public void onCrit (AttackEvent.CriticalHit event) {
+	public void onCrit(AttackEvent.CriticalHit event) {
 		event.critMultiplier = 1.5;
 	}
 }

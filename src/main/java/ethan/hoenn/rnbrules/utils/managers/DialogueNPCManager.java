@@ -4,6 +4,7 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipan
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
+import ethan.hoenn.rnbrules.utils.managers.ProgressionManager;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.command.CommandSource;
@@ -15,7 +16,6 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
-import ethan.hoenn.rnbrules.utils.managers.ProgressionManager;
 
 public class DialogueNPCManager {
 
@@ -99,7 +99,7 @@ public class DialogueNPCManager {
 		ActiveDialogueData dialogueData = activeChattingNPCDialogues.get(playerUUID);
 		String dialogueId = dialogueData != null ? dialogueData.dialogueId : null;
 		UUID npcUUID = npc.getUUID();
-		
+
 		// Mark the dialogue as completed in the progression manager
 		if (dialogueId != null && !dialogueId.isEmpty()) {
 			ProgressionManager.get().markDialogueCompleted(playerUUID, npcUUID, dialogueId);
@@ -478,7 +478,7 @@ public class DialogueNPCManager {
 		ActiveTrainerDialogueData dialogueData = activeTrainerDialogues.get(playerUUID);
 		String dialogueId = dialogueData != null ? dialogueData.getDialogueId() : null;
 		UUID trainerUUID = trainer.getUUID();
-		
+
 		// Mark the dialogue as completed in the progression manager
 		if (dialogueId != null && !dialogueId.isEmpty()) {
 			ProgressionManager.get().markDialogueCompleted(playerUUID, trainerUUID, dialogueId);

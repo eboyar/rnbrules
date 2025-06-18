@@ -18,18 +18,21 @@ public class PlayerTradeListener {
 		Pokemon pkm2 = event.getPokemon2();
 
 		LevelCapManager lcm = LevelCapManager.get(p1.getLevel());
-		
+
 		int p1LevelCap = lcm.getLevelCap(p1.getUUID());
 		int p2LevelCap = lcm.getLevelCap(p2.getUUID());
 
 		int pkm1Level = pkm1.getPokemonLevel();
 		int pkm2Level = pkm2.getPokemonLevel();
-		
+
 		if (pkm2Level > p1LevelCap) {
 			event.setCanceled(true);
 			String message = TextFormatting.RED + "Trade cancelled! The Pokemon you would receive (Lvl " + pkm2Level + ") exceeds your level cap of " + p1LevelCap + ".";
 			p1.sendMessage(new StringTextComponent(message), p1.getUUID());
-			p2.sendMessage(new StringTextComponent(TextFormatting.RED + "Trade cancelled! Your Pokemon (Lvl " + pkm2Level + ") exceeds " + p1.getDisplayName().getString() + "'s level cap of " + p1LevelCap + "."), p2.getUUID());
+			p2.sendMessage(
+				new StringTextComponent(TextFormatting.RED + "Trade cancelled! Your Pokemon (Lvl " + pkm2Level + ") exceeds " + p1.getDisplayName().getString() + "'s level cap of " + p1LevelCap + "."),
+				p2.getUUID()
+			);
 			return;
 		}
 
@@ -37,38 +40,42 @@ public class PlayerTradeListener {
 			event.setCanceled(true);
 			String message = TextFormatting.RED + "Trade cancelled! The Pokemon you would receive (Lvl " + pkm1Level + ") exceeds your level cap of " + p2LevelCap + ".";
 			p2.sendMessage(new StringTextComponent(message), p2.getUUID());
-			p1.sendMessage(new StringTextComponent(TextFormatting.RED + "Trade cancelled! Your Pokemon (Lvl " + pkm1Level + ") exceeds " + p2.getDisplayName().getString() + "'s level cap of " + p2LevelCap + "."), p1.getUUID());
+			p1.sendMessage(
+				new StringTextComponent(TextFormatting.RED + "Trade cancelled! Your Pokemon (Lvl " + pkm1Level + ") exceeds " + p2.getDisplayName().getString() + "'s level cap of " + p2LevelCap + "."),
+				p1.getUUID()
+			);
 			return;
 		}
 
-		
 		String cl1 = pkm1.getPersistentData().getString("CatchLocation");
 		String cl2 = pkm2.getPersistentData().getString("CatchLocation");
 
-		
-		String[] forbiddenLocations = {"fossil", "gamecorner", "starter", "hoennstarter", "roamer", "chosen"};
+		String[] forbiddenLocations = { "fossil", "gamecorner", "starter", "hoennstarter", "roamer", "chosen" };
 
-		
 		for (String forbidden : forbiddenLocations) {
 			if (cl1.equalsIgnoreCase(forbidden)) {
 				event.setCanceled(true);
 				String message = TextFormatting.RED + "Trade cancelled! Your Pokemon is not wild caught or is exceedingly rare and cannot be traded.";
 				p1.sendMessage(new StringTextComponent(message), p1.getUUID());
-				p2.sendMessage(new StringTextComponent(TextFormatting.RED + "Trade cancelled! " + p1.getDisplayName().getString() + "'s Pokemon is not wild caught or is exceedingly rare and cannot be traded."), p2.getUUID());
+				p2.sendMessage(
+					new StringTextComponent(TextFormatting.RED + "Trade cancelled! " + p1.getDisplayName().getString() + "'s Pokemon is not wild caught or is exceedingly rare and cannot be traded."),
+					p2.getUUID()
+				);
 				return;
 			}
 		}
 
-		
 		for (String forbidden : forbiddenLocations) {
 			if (cl2.equalsIgnoreCase(forbidden)) {
 				event.setCanceled(true);
 				String message = TextFormatting.RED + "Trade cancelled! Your Pokemon is not wild caught or is exceedingly rare and cannot be traded.";
 				p2.sendMessage(new StringTextComponent(message), p2.getUUID());
-				p1.sendMessage(new StringTextComponent(TextFormatting.RED + "Trade cancelled! " + p2.getDisplayName().getString() + "'s Pokemon is not wild caught or is exceedingly rare and cannot be traded."), p1.getUUID());
+				p1.sendMessage(
+					new StringTextComponent(TextFormatting.RED + "Trade cancelled! " + p2.getDisplayName().getString() + "'s Pokemon is not wild caught or is exceedingly rare and cannot be traded."),
+					p1.getUUID()
+				);
 				return;
 			}
 		}
-
 	}
 }

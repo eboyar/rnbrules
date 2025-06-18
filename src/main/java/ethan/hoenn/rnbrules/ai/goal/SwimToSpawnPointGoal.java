@@ -2,16 +2,16 @@ package ethan.hoenn.rnbrules.ai.goal;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import ethan.hoenn.rnbrules.utils.misc.SpawnPointHelper;
+import java.util.EnumSet;
+import java.util.Random;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.EnumSet;
-import java.util.Random;
-
 public class SwimToSpawnPointGoal extends Goal {
+
 	private final PixelmonEntity pixelmon;
 	private final double speed;
 	private final int maxDistanceSquared;
@@ -40,11 +40,9 @@ public class SwimToSpawnPointGoal extends Goal {
 		this.pathRecalcDelay = 0;
 		this.targetWaterPos = null;
 		tryFindValidPoint();
-
 	}
 
 	private void tryFindValidPoint() {
-
 		BlockPos spawnPointBase = SpawnPointHelper.getSpawnPoint(this.pixelmon);
 		World world = this.pixelmon.level;
 
@@ -52,9 +50,7 @@ public class SwimToSpawnPointGoal extends Goal {
 			int offsetX = this.random.nextInt(this.searchRadius * 2 + 1) - this.searchRadius;
 			int offsetZ = this.random.nextInt(this.searchRadius * 2 + 1) - this.searchRadius;
 
-
 			BlockPos potentialXZBase = new BlockPos(spawnPointBase.getX() + offsetX, this.pixelmon.getY(), spawnPointBase.getZ() + offsetZ);
-
 
 			for (int yOffset = 0; yOffset >= -4; yOffset--) {
 				BlockPos checkPos = potentialXZBase.offset(0, yOffset, 0);
@@ -71,15 +67,12 @@ public class SwimToSpawnPointGoal extends Goal {
 				}
 			}
 		}
-
 	}
 
 	private boolean isSuitableWaterBlock(World world, BlockPos pos) {
 		FluidState fluidState = world.getFluidState(pos);
 
 		if (fluidState.is(FluidTags.WATER) && fluidState.isSource()) {
-
-
 			BlockPos posAbove = pos.above();
 			FluidState fluidAbove = world.getFluidState(posAbove);
 			return fluidAbove.is(FluidTags.WATER) || !world.getBlockState(posAbove).getMaterial().isSolid();
@@ -101,7 +94,6 @@ public class SwimToSpawnPointGoal extends Goal {
 
 	@Override
 	public boolean canContinueToUse() {
-
 		if (!this.pixelmon.isInWater() || !SpawnPointHelper.hasSpawnPoint(this.pixelmon) || this.targetWaterPos == null || this.pixelmon.getNavigation().isDone()) {
 			return false;
 		}
@@ -114,6 +106,5 @@ public class SwimToSpawnPointGoal extends Goal {
 	public void stop() {
 		this.pixelmon.getNavigation().stop();
 		this.targetWaterPos = null;
-
 	}
 }

@@ -19,9 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 public class InteractionCustomBottleCap implements IInteraction {
-	public InteractionCustomBottleCap() {
 
-	}
+	public InteractionCustomBottleCap() {}
 
 	public boolean processInteract(PixelmonEntity pixelmon, PlayerEntity player, Hand hand, ItemStack itemstack) {
 		if (!player.level.isClientSide && hand != Hand.OFF_HAND && itemstack.getItem() instanceof BottlecapItem) {
@@ -30,8 +29,21 @@ public class InteractionCustomBottleCap implements IInteraction {
 				return false;
 			} else {
 				IVStore ivs = data.getIVs();
-				boolean isMax = ivs.getStat(BattleStatsType.HP) + ivs.getStat(BattleStatsType.ATTACK) + ivs.getStat(BattleStatsType.DEFENSE) + ivs.getStat(BattleStatsType.SPECIAL_ATTACK) + ivs.getStat(BattleStatsType.SPECIAL_DEFENSE) + ivs.getStat(BattleStatsType.SPEED) == 186;
-				boolean isHt = ivs.isHyperTrained(BattleStatsType.HP) && ivs.isHyperTrained(BattleStatsType.ATTACK) && ivs.isHyperTrained(BattleStatsType.DEFENSE) && ivs.isHyperTrained(BattleStatsType.SPECIAL_ATTACK) && ivs.isHyperTrained(BattleStatsType.SPECIAL_DEFENSE) && ivs.isHyperTrained(BattleStatsType.SPEED);
+				boolean isMax =
+					ivs.getStat(BattleStatsType.HP) +
+						ivs.getStat(BattleStatsType.ATTACK) +
+						ivs.getStat(BattleStatsType.DEFENSE) +
+						ivs.getStat(BattleStatsType.SPECIAL_ATTACK) +
+						ivs.getStat(BattleStatsType.SPECIAL_DEFENSE) +
+						ivs.getStat(BattleStatsType.SPEED) ==
+					186;
+				boolean isHt =
+					ivs.isHyperTrained(BattleStatsType.HP) &&
+					ivs.isHyperTrained(BattleStatsType.ATTACK) &&
+					ivs.isHyperTrained(BattleStatsType.DEFENSE) &&
+					ivs.isHyperTrained(BattleStatsType.SPECIAL_ATTACK) &&
+					ivs.isHyperTrained(BattleStatsType.SPECIAL_DEFENSE) &&
+					ivs.isHyperTrained(BattleStatsType.SPEED);
 				if (!isMax && !isHt) {
 					BottlecapItem bottleCap = (BottlecapItem) itemstack.getItem();
 					if (Pixelmon.EVENT_BUS.post(new BottleCapEvent(pixelmon, player, bottleCap.type, itemstack))) {
@@ -40,8 +52,8 @@ public class InteractionCustomBottleCap implements IInteraction {
 						if (bottleCap.type == EnumBottleCap.GOLD) {
 							ivs.setHyperTrained((BattleStatsType) null, true);
 							data.getStats().setLevelStats(data.getNature(), data.getForm(), data.getPokemonLevel());
-							data.markDirty(new EnumUpdateType[]{EnumUpdateType.HP, EnumUpdateType.Stats});
-							ChatHandler.sendChat(player, "pixelmon.interaction.bottlecap.goldcap", new Object[]{pixelmon.getNickname()});
+							data.markDirty(new EnumUpdateType[] { EnumUpdateType.HP, EnumUpdateType.Stats });
+							ChatHandler.sendChat(player, "pixelmon.interaction.bottlecap.goldcap", new Object[] { pixelmon.getNickname() });
 							itemstack.shrink(1);
 						} else {
 							BattleStatsType[] types = BattleStatsType.getEVIVStatValues();
@@ -58,7 +70,7 @@ public class InteractionCustomBottleCap implements IInteraction {
 						return true;
 					}
 				} else {
-					ChatHandler.sendChat(player, "pixelmon.interaction.bottlecap.full", new Object[]{pixelmon.getNickname()});
+					ChatHandler.sendChat(player, "pixelmon.interaction.bottlecap.full", new Object[] { pixelmon.getNickname() });
 					return true;
 				}
 			}

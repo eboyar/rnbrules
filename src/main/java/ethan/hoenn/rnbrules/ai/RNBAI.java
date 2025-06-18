@@ -19,7 +19,6 @@ import ethan.hoenn.rnbrules.ai.scorers.GeneralMoveScorer;
 import ethan.hoenn.rnbrules.ai.scorers.SpecializedMoveScorer;
 import ethan.hoenn.rnbrules.ai.scorers.SwitchMoveScorer;
 import ethan.hoenn.rnbrules.ai.utils.IllusionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -69,13 +68,12 @@ public class RNBAI extends BattleAIBase {
 	public MoveChoice getNextMove(PixelmonWrapper pw) {
 		List<MoveChoice> attackChoices = getAttackChoices(pw);
 
-		
 		List<UUID> possibleSwitches = getPossibleSwitchIDs();
 		voluntarySwitchTarget = switchMoveScorer.shouldSwitch(pw, possibleSwitches, attackChoices);
-		
+
 		if (voluntarySwitchTarget != null) {
 			debugLog("Voluntary switch triggered to: " + voluntarySwitchTarget);
-			
+
 			return null;
 		}
 
@@ -97,7 +95,6 @@ public class RNBAI extends BattleAIBase {
 			List<MoveChoice> evaluatedChoices = new ArrayList<>();
 
 			for (MoveChoice originalChoice : choices) {
-
 				if (isDoubleBattle(bc) && originalChoice.targets.size() > 1) {
 					float bestScore = 0.0f;
 					PixelmonWrapper bestTarget = null;
@@ -141,20 +138,24 @@ public class RNBAI extends BattleAIBase {
 	private void evaluateSingleChoice(PixelmonWrapper pw, MoveChoice choice) {
 		choice.weight = 0.0f;
 
-		
 		IllusionUtils.IllusionData illusionData = IllusionUtils.checkForIllusion(pw, choice, debugMode);
-		
+
 		if (illusionData != null && illusionData.shouldDoTemporarySwitch()) {
-			
-			IllusionUtils.evaluateChoiceWithIllusionSwitch(pw, choice, illusionData.targetWithIllusion, 
-					illusionData.actualDisguisedPokemon, bc, () -> {
-						boolean wasHandledBySpecialized = specializedMoveScorer.scoreSpecializedMove(pw, choice);
-						if (!wasHandledBySpecialized) {
-							generalMoveScorer.scoreGeneralMove(pw, choice);
-						}
-					}, debugMode);
+			IllusionUtils.evaluateChoiceWithIllusionSwitch(
+				pw,
+				choice,
+				illusionData.targetWithIllusion,
+				illusionData.actualDisguisedPokemon,
+				bc,
+				() -> {
+					boolean wasHandledBySpecialized = specializedMoveScorer.scoreSpecializedMove(pw, choice);
+					if (!wasHandledBySpecialized) {
+						generalMoveScorer.scoreGeneralMove(pw, choice);
+					}
+				},
+				debugMode
+			);
 		} else {
-			
 			boolean wasHandledBySpecialized = specializedMoveScorer.scoreSpecializedMove(pw, choice);
 
 			if (!wasHandledBySpecialized) {
@@ -162,7 +163,9 @@ public class RNBAI extends BattleAIBase {
 			}
 		}
 
-		debugLog("Score for " + choice.attack.getActualMove().getAttackName() + (!choice.targets.isEmpty() ? " against " + choice.targets.get(0).getSpecies().getLocalizedName() : "") + ": " + choice.weight);
+		debugLog(
+			"Score for " + choice.attack.getActualMove().getAttackName() + (!choice.targets.isEmpty() ? " against " + choice.targets.get(0).getSpecies().getLocalizedName() : "") + ": " + choice.weight
+		);
 	}
 
 	private List<MoveChoice> getBestScoringMoves(List<MoveChoice> choices) {
@@ -189,16 +192,13 @@ public class RNBAI extends BattleAIBase {
 
 	@Override
 	public UUID getNextSwitch(PixelmonWrapper pw) {
-		
 		if (voluntarySwitchTarget != null) {
 			UUID target = voluntarySwitchTarget;
-			voluntarySwitchTarget = null; 
+			voluntarySwitchTarget = null;
 			debugLog("Executing voluntary switch to: " + target);
 			return target;
 		}
-		
-		
-		
+
 		List<UUID> choices = getPossibleSwitchIDs();
 
 		if (!choices.isEmpty()) return switchMoveScorer.mustSwitch(pw, choices);
