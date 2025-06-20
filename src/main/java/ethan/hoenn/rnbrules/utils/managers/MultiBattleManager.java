@@ -1,5 +1,6 @@
 package ethan.hoenn.rnbrules.utils.managers;
 
+import com.pixelmonmod.pixelmon.api.battles.BattleEndCause;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.battles.BattleType;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
@@ -145,7 +146,7 @@ public class MultiBattleManager {
 			.endHandler((battleEndEvent, battleController) -> {
 				removeOngoingBattle(player.getUUID());
 
-				if (battleEndEvent.getResult(player).orElse(null) == BattleResults.VICTORY) {
+				if (battleEndEvent.getResult(player).orElse(null) == BattleResults.VICTORY && battleEndEvent.getCause().equals(BattleEndCause.NORMAL) && !battleEndEvent.isAbnormal()) {
 					UUID originalTrainerUUID = getOriginalTrainerUUID(copyTrainer.getUUID());
 
 					if (originalTrainerUUID != null) {
@@ -171,16 +172,12 @@ public class MultiBattleManager {
 		if (entity instanceof NPCTrainer) {
 			ProgressionManager pm = ProgressionManager.get();
 
-			// Check if this trainer is part of a gauntlet
 			GauntletManager gm = GauntletManager.get(world);
 			String gauntletId = gm.findGauntletForTrainerWithPartners(trainerUUID.toString(), world);
 
 			if (gauntletId != null && pm.isInGauntlet(playerUUID)) {
-				// If this is a gauntlet trainer and the player is in a gauntlet,
-				// mark as temporary defeat - the GauntletListeners will handle promotion to permanent
 				pm.markGauntletTrainerDefeated(playerUUID, trainerUUID);
 			} else {
-				// For non-gauntlet trainers, mark as permanent defeat
 				pm.markTrainerDefeated(playerUUID, trainerUUID);
 			}
 		}

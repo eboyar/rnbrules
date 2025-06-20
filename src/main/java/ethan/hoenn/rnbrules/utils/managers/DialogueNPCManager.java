@@ -1,5 +1,8 @@
 package ethan.hoenn.rnbrules.utils.managers;
 
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelectionRegistry;
+import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
@@ -474,12 +477,10 @@ public class DialogueNPCManager {
 	}
 
 	private void markTrainerDialogueCompleted(NPCTrainer trainer, UUID playerUUID) {
-		// Get dialogue data from the active dialogue
 		ActiveTrainerDialogueData dialogueData = activeTrainerDialogues.get(playerUUID);
 		String dialogueId = dialogueData != null ? dialogueData.getDialogueId() : null;
 		UUID trainerUUID = trainer.getUUID();
 
-		// Mark the dialogue as completed in the progression manager
 		if (dialogueId != null && !dialogueId.isEmpty()) {
 			ProgressionManager.get().markDialogueCompleted(playerUUID, trainerUUID, dialogueId);
 		}
@@ -493,11 +494,17 @@ public class DialogueNPCManager {
 			return false;
 		}
 
-		boolean result = MultiBattleManager.startTrainerBattle(dialogueData.playerParticipant, dialogueData.trainerParticipant);
+		//boolean result = MultiBattleManager.startTrainerBattle(dialogueData.playerParticipant, dialogueData.trainerParticipant);
+		TeamSelectionRegistry.builder()
+				.members(new Entity[]{dialogueData.getTrainerParticipant().trainer, dialogueData.getPlayerParticipant().player})
+				.showRules()
+				.showOpponentTeam()
+				.closeable()
+				.battleRules(dialogueData.getTrainerParticipant().trainer.battleRules)
+				.start();
 
 		activeTrainerDialogues.remove(playerUUID);
-
-		return result;
+		return true;
 	}
 
 	public boolean hasActiveTrainerDialogue(UUID playerUUID) {

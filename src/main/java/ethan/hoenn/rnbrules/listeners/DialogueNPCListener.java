@@ -1,14 +1,17 @@
 package ethan.hoenn.rnbrules.listeners;
 
 import com.pixelmonmod.pixelmon.api.events.PokeBallImpactEvent;
-import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.events.npc.NPCEvent;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonItems;
-import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
+import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
+import com.pixelmonmod.pixelmon.entities.pokeballs.EmptyPokeBallEntity;
 import ethan.hoenn.rnbrules.dialogue.DialogueManager;
 import ethan.hoenn.rnbrules.dialogue.DialoguePage;
 import ethan.hoenn.rnbrules.dialogue.DialogueRegistry;
@@ -19,12 +22,15 @@ import ethan.hoenn.rnbrules.utils.data.dialog.DialogueFileData;
 import ethan.hoenn.rnbrules.utils.data.dialog.DialoguePageData;
 import ethan.hoenn.rnbrules.utils.managers.BattleDependencyManager;
 import ethan.hoenn.rnbrules.utils.managers.DialogueNPCManager;
+import ethan.hoenn.rnbrules.utils.managers.ProgressionManager;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -32,10 +38,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.NetworkDirection;
 
 public class DialogueNPCListener {
 
-	// Order of checks for chatting NPC: BattleDeps, Dialogue, OneTimeRewards, Ferry / Heartscale / Gamecorner
+	
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onInteractWithChattingNPC(NPCEvent.Interact event) {
 		if (event.npc instanceof NPCChatting && event.player instanceof ServerPlayerEntity && !(event.player.getMainHandItem().getItem().equals(PixelmonItems.trainer_editor))) {
@@ -44,11 +51,12 @@ public class DialogueNPCListener {
 			NPCChatting npc = (NPCChatting) event.npc;
 			BattleDependencyManager depManager = BattleDependencyManager.get((ServerWorld) player.level);
 			UUID playerUUID = player.getUUID();
+			ProgressionManager progressionManager = ProgressionManager.get();
 
 			if (data.contains("DialoguesMap")) {
 				CompoundNBT dialoguesMap = data.getCompound("DialoguesMap");
 				if (!dialoguesMap.isEmpty()) {
-					DialogResult result = findApplicableDialog(dialoguesMap, data, player, playerUUID, depManager, npc.getName("en_us"), true);
+					DialogResult result = findApplicableDialog(dialoguesMap, data, player, playerUUID, depManager, npc.getName("en_us"), npc, true);
 
 					if (result.shouldCancel) {
 						event.setCanceled(true);
@@ -72,12 +80,9 @@ public class DialogueNPCListener {
 				return;
 			}
 
-			ListNBT completedDialogue = data.contains("DialogueCompleted") ? data.getList("DialogueCompleted", 10) : new ListNBT();
-			for (int i = 0; i < completedDialogue.size(); i++) {
-				CompoundNBT tag = completedDialogue.getCompound(i);
-				if (tag.hasUUID("UUID") && tag.getUUID("UUID").equals(playerUUID)) {
-					return;
-				}
+			
+			if (progressionManager.hasCompletedDialogue(playerUUID, npc.getUUID(), dialogueId)) {
+				return;
 			}
 
 			event.setCanceled(true);
@@ -85,38 +90,45 @@ public class DialogueNPCListener {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.NORMAL)
-	public void onBattleStart(BattleStartedEvent.Pre event) {
-		List<BattleParticipant> bps = event.getBattleController().participants;
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onPokeBallImpactTrainer(PokeBallImpactEvent event) {
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPokeBall().getOwner();
 
-		PlayerParticipant pp = null;
-		TrainerParticipant tp = null;
-
-		for (BattleParticipant bp : bps) {
-			if (bp instanceof TrainerParticipant) {
-				tp = (TrainerParticipant) bp;
-			} else if (bp instanceof PlayerParticipant) {
-				pp = (PlayerParticipant) bp;
-			}
-		}
-
-		if (tp == null || pp == null) {
+		if (event.getPokeBall() instanceof EmptyPokeBallEntity) {
 			return;
 		}
 
-		ServerPlayerEntity player = pp.player;
-		NPCTrainer trainer = tp.trainer;
+		Optional<Entity> hit = event.getEntityHit();
+		if (!hit.isPresent() || !(hit.get() instanceof NPCTrainer)) {
+			return;
+		}
+
+		NPCTrainer trainer = (NPCTrainer) hit.get();
 		CompoundNBT data = trainer.getPersistentData();
-
-		data.putBoolean("IsTrainer", true);
-
 		UUID playerUUID = player.getUUID();
 		BattleDependencyManager depManager = BattleDependencyManager.get((ServerWorld) player.level);
+		ProgressionManager progressionManager = ProgressionManager.get();
 
+		
+		BattleController bc = trainer.getBattleController();
+		if (bc != null) {
+			if (!bc.battleEnded) {
+				sendCancelMessage(event, player, "§9" + trainer.getName("en_us") + "§7 is currently in battle.");
+				return;
+			}
+		}
+
+		
+		if (!trainer.canStartBattle(player, true)) {
+			event.setCanceled(true);
+			return;
+		}
+
+		
 		if (data.contains("DialoguesMap")) {
 			CompoundNBT dialoguesMap = data.getCompound("DialoguesMap");
 			if (!dialoguesMap.isEmpty()) {
-				DialogResult result = findApplicableDialog(dialoguesMap, data, player, playerUUID, depManager, trainer.getName("en_us"), true);
+				DialogResult result = findApplicableDialog(dialoguesMap, data, player, playerUUID, depManager, trainer.getName("en_us"), trainer, true);
 
 				if (result.shouldCancel) {
 					event.setCanceled(true);
@@ -124,54 +136,105 @@ public class DialogueNPCListener {
 				}
 
 				if (result.dialogId != null) {
+					
+					PlayerPartyStorage storage = StorageProxy.getParty(player);
+					
+					
+					Pokemon firstPokemon = null;
+					for (Pokemon p : storage.getAll()) {
+						if (p != null && p.getHealth() > 0 && !p.isEgg()) {
+							firstPokemon = p;
+							break;
+						}
+					}
+					
+					if (firstPokemon == null) {
+						sendCancelMessage(event, player, "§7You need at least one healthy Pokemon to battle.");
+						return;
+					}
+
+					final Pokemon pokemon = firstPokemon;
+					TrainerParticipant trainerParticipant = new TrainerParticipant(trainer, player, trainer.getBattleType().getNumPokemon());
+					PlayerParticipant playerParticipant;
+					
+					if (trainer.getBattleType().getNumPokemon() == 1) {
+						playerParticipant = new PlayerParticipant(player, new Pokemon[]{pokemon});
+					} else {
+						List<Pokemon> pokemonList = new ArrayList<>();
+						pokemonList.add(pokemon);
+						pokemonList.addAll(storage.getTeam().stream()
+							.filter(p -> p.getHealth() > 0 && p != pokemon)
+							.collect(Collectors.toList()));
+						playerParticipant = new PlayerParticipant(player, pokemonList, 2);
+					}
+
 					event.setCanceled(true);
-					startTrainerDialogue(player, trainer, result.dialogId, tp, pp);
+					startTrainerDialogue(player, trainer, result.dialogId, trainerParticipant, playerParticipant);
 					return;
 				}
 			}
 		}
 
-		if (!data.contains("DialogueID")) {
-			return;
-		}
-
-		String dialogueId = data.getString("DialogueID");
-		if (dialogueId.isEmpty()) {
-			return;
-		}
-
-		ListNBT completedDialogue = data.contains("DialogueCompleted") ? data.getList("DialogueCompleted", 10) : new ListNBT();
-
-		for (int i = 0; i < completedDialogue.size(); i++) {
-			CompoundNBT tag = completedDialogue.getCompound(i);
-			if (tag.hasUUID("UUID") && tag.getUUID("UUID").equals(playerUUID)) {
-				return;
-			}
-		}
-
-		if (depManager.trainerHasDependencies(trainer)) {
-			Set<String> npcDeps = depManager.getTrainerDependencies(trainer);
-			boolean missingDependency = false;
-
-			for (String depId : npcDeps) {
-				if (!depManager.playerHasDependency(player.getUUID(), depId)) {
-					missingDependency = true;
-					String depDescription = depManager.getDependency(depId) != null ? depManager.getDependency(depId).getDescription() : "Unknown requirement";
-
-					player.sendMessage(new StringTextComponent("§9" + trainer.getName("en_us") + "§7 wants to battle you, but you must §6" + depDescription + "§7 first."), player.getUUID());
-
-					event.setCanceled(true);
-					break;
+		
+		if (data.contains("DialogueID")) {
+			String dialogueId = data.getString("DialogueID");
+			if (!dialogueId.isEmpty()) {
+				
+				if (progressionManager.hasCompletedDialogue(playerUUID, trainer.getUUID(), dialogueId)) {
+					return; 
 				}
-			}
 
-			if (missingDependency) {
-				return;
+				
+				if (depManager.trainerHasDependencies(trainer)) {
+					Set<String> npcDeps = depManager.getTrainerDependencies(trainer);
+					for (String depId : npcDeps) {
+						if (!depManager.playerHasDependency(player.getUUID(), depId)) {
+							String depDescription = depManager.getDependency(depId) != null ? 
+								depManager.getDependency(depId).getDescription() : "Unknown requirement";
+							sendCancelMessage(event, player, "§9" + trainer.getName("en_us") + 
+								"§7 wants to battle you, but you must §6" + depDescription + "§7 first.");
+							return;
+						}
+					}
+				}
+
+				
+				PlayerPartyStorage storage = StorageProxy.getParty(player);
+				
+				
+				Pokemon firstPokemon = null;
+				for (Pokemon p : storage.getAll()) {
+					if (p != null && p.getHealth() > 0 && !p.isEgg()) {
+						firstPokemon = p;
+						break;
+					}
+				}
+				
+				if (firstPokemon == null) {
+					sendCancelMessage(event, player, "§7You need at least one healthy Pokemon to battle.");
+					return;
+				}
+
+				final Pokemon pokemon = firstPokemon;
+				TrainerParticipant trainerParticipant = new TrainerParticipant(trainer, player, trainer.getBattleType().getNumPokemon());
+				PlayerParticipant playerParticipant;
+				
+				if (trainer.getBattleType().getNumPokemon() == 1) {
+					playerParticipant = new PlayerParticipant(player, new Pokemon[]{pokemon});
+				} else {
+					List<Pokemon> pokemonList = new ArrayList<>();
+					pokemonList.add(pokemon);
+					pokemonList.addAll(storage.getTeam().stream()
+						.filter(p -> p.getHealth() > 0 && p != pokemon)
+						.collect(Collectors.toList()));
+					playerParticipant = new PlayerParticipant(player, pokemonList, 2);
+				}
+
+				event.getPokeBall().remove();
+				event.setCanceled(true);
+				startTrainerDialogue(player, trainer, dialogueId, trainerParticipant, playerParticipant);
 			}
 		}
-
-		event.setCanceled(true);
-		startTrainerDialogue(player, trainer, dialogueId, tp, pp);
 	}
 
 	private void startTrainerDialogue(ServerPlayerEntity player, NPCTrainer trainer, String dialogueId, TrainerParticipant tp, PlayerParticipant pp) {
@@ -253,6 +316,7 @@ public class DialogueNPCListener {
 		UUID playerUUID,
 		BattleDependencyManager depManager,
 		String npcName,
+		Entity npcEntity,
 		boolean showMessages
 	) {
 		List<Integer> dialogOrders = new ArrayList<>();
@@ -265,16 +329,9 @@ public class DialogueNPCListener {
 		}
 		Collections.sort(dialogOrders);
 
-		Set<String> completedDialogs = new HashSet<>();
-		if (data.contains("DialogueCompleted")) {
-			ListNBT completedList = data.getList("DialogueCompleted", 10);
-			for (int i = 0; i < completedList.size(); i++) {
-				CompoundNBT tag = completedList.getCompound(i);
-				if (tag.hasUUID("UUID") && tag.getUUID("UUID").equals(playerUUID) && tag.contains("DialogueID")) {
-					completedDialogs.add(tag.getString("DialogueID"));
-				}
-			}
-		}
+		
+		ProgressionManager progressionManager = ProgressionManager.get();
+		UUID npcUUID = npcEntity.getUUID();
 
 		String firstBlockedDialogId = null;
 		String firstMissingDepId = null;
@@ -289,7 +346,8 @@ public class DialogueNPCListener {
 				continue;
 			}
 
-			if (completedDialogs.contains(dialogID)) {
+			
+			if (progressionManager.hasCompletedDialogue(playerUUID, npcUUID, dialogID)) {
 				continue;
 			}
 
@@ -349,6 +407,12 @@ public class DialogueNPCListener {
 		}
 
 		return new DialogResult(null, false);
+	}
+
+	private void sendCancelMessage(PokeBallImpactEvent event, ServerPlayerEntity player, String message) {
+		PacketHandler.INSTANCE.sendTo(new CancelTeamSelectionPacket(message), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+		event.getPokeBall().remove();
+		event.setCanceled(true);
 	}
 
 	private class DialogResult {
