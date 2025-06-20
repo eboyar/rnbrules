@@ -42,7 +42,8 @@
 		"items.CustomRunningBootsItem",
 		"items.CustomSoulDew",
 		"moves.CustomDefog",
-		"FTBTeams.CustomFTBTeamsCommands"
+		"FTBTeams.CustomFTBTeamsCommands",
+		"battle.CustomCriticalHitMultiplier"
 	],
 	"injectors": {
 		"defaultRequire": 1

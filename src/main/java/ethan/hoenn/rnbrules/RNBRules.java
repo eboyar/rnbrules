@@ -82,7 +82,6 @@ public class RNBRules {
 		Pixelmon.EVENT_BUS.register(new RoamerFleeListener());
 		Pixelmon.EVENT_BUS.register(new LeagueListener());
 		Pixelmon.EVENT_BUS.register(new SpawningListener());
-		Pixelmon.EVENT_BUS.register(new CritListener());
 
 		PokemonSpecificationProxy.register(new SpawnPointRequirement());
 		PokemonSpecificationProxy.register(new NeedsSurfRequirement());
