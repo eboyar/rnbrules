@@ -109,7 +109,7 @@ public class FlyCountdown {
 	}
 
 	private void finishTeleport() {
-		player.connection.send(new STitlePacket(STitlePacket.Type.TITLE, new StringTextComponent("Welcome to " + destination).withStyle(TextFormatting.GREEN), 10, 30, 10));
+		player.connection.send(new STitlePacket(STitlePacket.Type.TITLE, new StringTextComponent("Welcome to " + destination).withStyle(TextFormatting.GREEN), 10, 40, 10));
 		player.connection.send(new STitlePacket(STitlePacket.Type.SUBTITLE, new StringTextComponent(""), 10, 0, 10));
 
 		LocationManager lm = LocationManager.get(player.getLevel());

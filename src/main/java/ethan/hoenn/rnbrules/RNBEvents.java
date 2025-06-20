@@ -1,20 +1,6 @@
 package ethan.hoenn.rnbrules;
 
-import com.pixelmonmod.pixelmon.items.AbilityCapsuleItem;
-import com.pixelmonmod.pixelmon.items.AbilityPatchItem;
-import com.pixelmonmod.pixelmon.items.BadgeItem;
-import com.pixelmonmod.pixelmon.items.BikeItem;
-import com.pixelmonmod.pixelmon.items.BottlecapItem;
-import com.pixelmonmod.pixelmon.items.EvolutionStoneItem;
-import com.pixelmonmod.pixelmon.items.ExpCandyItem;
 import com.pixelmonmod.pixelmon.items.HMItem;
-import com.pixelmonmod.pixelmon.items.HeldItem;
-import com.pixelmonmod.pixelmon.items.MintItem;
-import com.pixelmonmod.pixelmon.items.PokeBagItem;
-import com.pixelmonmod.pixelmon.items.QuestItem;
-import com.pixelmonmod.pixelmon.items.TechnicalMoveItem;
-import com.pixelmonmod.pixelmon.items.ValuableItem;
-import com.pixelmonmod.pixelmon.items.heldItems.MegaStoneItem;
 import ethan.hoenn.rnbrules.dialogue.DialogueManager;
 import ethan.hoenn.rnbrules.dialogue.DialogueRegistry;
 import ethan.hoenn.rnbrules.gui.ferry.FerryCountdown;
@@ -22,11 +8,11 @@ import ethan.hoenn.rnbrules.gui.flight.FlyCountdown;
 import ethan.hoenn.rnbrules.gui.gamecorner.GamecornerAssets;
 import ethan.hoenn.rnbrules.gui.league.LeagueBattleCountdown;
 import ethan.hoenn.rnbrules.gui.safari.SafariCountdown;
-import ethan.hoenn.rnbrules.items.*;
 import ethan.hoenn.rnbrules.listeners.LocationListener;
 import ethan.hoenn.rnbrules.registries.CommandRegistry;
 import ethan.hoenn.rnbrules.utils.managers.*;
 import ethan.hoenn.rnbrules.utils.misc.HungerCounter;
+import ethan.hoenn.rnbrules.utils.misc.ItemDropValidator;
 import ethan.hoenn.rnbrules.utils.misc.PlayerFreezeTracker;
 import ethan.hoenn.rnbrules.utils.notifications.LocationNotifier;
 import java.io.File;
@@ -159,32 +145,7 @@ public class RNBEvents {
 		ItemStack itemS = event.getEntityItem().getItem();
 		Item item = itemS.getItem();
 
-		if (
-			item instanceof TechnicalMoveItem ||
-			item instanceof HMItem ||
-			item instanceof BadgeItem ||
-			item instanceof HeldItem ||
-			item instanceof PokeBagItem ||
-			item instanceof EvolutionStoneItem ||
-			item instanceof EndlessCandy ||
-			item instanceof PartyRestore ||
-			item instanceof MaxPartyRestore ||
-			item instanceof Battery ||
-			item instanceof MegaGem ||
-			item instanceof ExpCandyItem ||
-			item instanceof ValuableItem ||
-			item instanceof QuestItem ||
-			item instanceof BigBackpack ||
-			item instanceof BottlecapItem ||
-			item instanceof AbilityCapsuleItem ||
-			item instanceof AbilityPatchItem ||
-			item instanceof MintItem ||
-			item instanceof BikeItem ||
-			item instanceof GenericUpgradeItem ||
-			item instanceof GenericUpgradeComponentItem ||
-			item instanceof MaxHealingSerum ||
-			item instanceof MegaStoneItem
-		) {
+		if (ItemDropValidator.isNonDroppableItem(item)) {
 			event.getEntityItem().setNoPickUpDelay();
 			event.getEntityItem().setOwner(player.getUUID());
 		}
@@ -197,32 +158,7 @@ public class RNBEvents {
 			ItemStack itemS = event.getStack();
 			Item item = itemS.getItem();
 
-			if (
-				item instanceof TechnicalMoveItem ||
-				item instanceof HMItem ||
-				item instanceof BadgeItem ||
-				item instanceof HeldItem ||
-				item instanceof PokeBagItem ||
-				item instanceof EvolutionStoneItem ||
-				item instanceof EndlessCandy ||
-				item instanceof PartyRestore ||
-				item instanceof MaxPartyRestore ||
-				item instanceof Battery ||
-				item instanceof MegaGem ||
-				item instanceof ExpCandyItem ||
-				item instanceof ValuableItem ||
-				item instanceof QuestItem ||
-				item instanceof BigBackpack ||
-				item instanceof BottlecapItem ||
-				item instanceof AbilityCapsuleItem ||
-				item instanceof AbilityPatchItem ||
-				item instanceof MintItem ||
-				item instanceof BikeItem ||
-				item instanceof GenericUpgradeItem ||
-				item instanceof GenericUpgradeComponentItem ||
-				item instanceof MaxHealingSerum ||
-				item instanceof MegaStoneItem
-			) {
+			if (ItemDropValidator.isNonDroppableItem(item)) {
 				if (event.getOriginalEntity().getOwner() != player.getUUID()) {
 					event.setCanceled(true);
 				}

@@ -8,7 +8,6 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
-import ethan.hoenn.rnbrules.utils.managers.MultiBattleManager;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.command.CommandSource;
@@ -51,14 +50,14 @@ public class PreDamage {
 	public static int executePreDamage(CommandContext<CommandSource> context, int pos, int health, ServerPlayerEntity spe) {
 		try {
 			if (BattleRegistry.getBattle(spe) != null) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in battle."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in battle."), spe.getUUID());
 				return 0;
 			}
 
 			PlayerPartyStorage pps = StorageProxy.getParty(spe);
-
+			
 			if (pos < 1 || pos > 6 || pps.get(pos - 1) == null) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Invalid party position. Please choose a position between 1-6 with a Pokémon."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Invalid party position. Please choose a position between 1-6 with a Pokémon."), spe.getUUID());
 				return 0;
 			}
 
@@ -66,48 +65,46 @@ public class PreDamage {
 
 			//redundant?
 			if (health <= 0) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Health must be greater than 0."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Health must be greater than 0."), spe.getUUID());
 				return 0;
 			}
 
 			if (target.getMaxHealth() < health) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Cannot predamage Pokémon to health higher than its max health (" + target.getMaxHealth() + ")."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Cannot predamage Pokémon to health higher than its max health (" + target.getMaxHealth() + ")."), spe.getUUID());
 				return 0;
 			}
 
 			if (target.getHealth() < health) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "You cannot use this command to heal a Pokémon."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "You cannot use this command to heal a Pokémon."), spe.getUUID());
 				return 0;
 			}
 
 			if (target.getHealth() == health) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.YELLOW + "Pokémon's health is already at " + health + "."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.YELLOW + "Pokémon's health is already at " + health + "."), spe.getUUID());
 				return 0;
 			}
 
 			target.setHealth(health);
 
-			context
-				.getSource()
-				.sendSuccess(
-					new StringTextComponent(
-						TextFormatting.GREEN +
-						"Successfully predamaged " +
-						TextFormatting.GOLD +
-						target.getDisplayName() +
-						TextFormatting.GREEN +
-						" to " +
-						TextFormatting.RED +
-						health +
-						TextFormatting.GREEN +
-						" health."
-					),
-					true
-				);
+			spe.sendMessage(
+				new StringTextComponent(
+					TextFormatting.GREEN +
+					"Successfully predamaged " +
+					TextFormatting.GOLD +
+					target.getSpecies().getLocalizedName() +
+					TextFormatting.GREEN +
+					" to " +
+					TextFormatting.RED +
+					health +
+					TextFormatting.GREEN +
+					" health."
+				),
+				spe.getUUID()
+			);
 
 			return 1;
 		} catch (Exception e) {
-			context.getSource().sendFailure(new StringTextComponent(TextFormatting.GRAY + "Error executing command: " + e.getMessage()));
+			spe.sendMessage(new StringTextComponent(TextFormatting.GRAY + "Error executing command: " + e.getMessage()), spe.getUUID());
 			e.printStackTrace();
 			return 0;
 		}

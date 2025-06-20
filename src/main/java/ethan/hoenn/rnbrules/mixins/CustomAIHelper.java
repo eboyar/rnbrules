@@ -2,6 +2,7 @@ package ethan.hoenn.rnbrules.mixins;
 
 import com.pixelmonmod.pixelmon.api.util.helpers.AIHelper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
+import ethan.hoenn.rnbrules.ai.goal.CustomFlyingGoal;
 import ethan.hoenn.rnbrules.ai.goal.ReturnToSpawnPointGoal;
 import ethan.hoenn.rnbrules.ai.goal.SwimToSpawnPointGoal;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AIHelper.class)
@@ -38,5 +40,13 @@ public class CustomAIHelper {
 		if (needsSpawnPoint != 0) {
 			tasks.addGoal(1, new SwimToSpawnPointGoal(entity, entity.getAttribute(Attributes.MOVEMENT_SPEED).getValue(), needsSpawnPoint));
 		}
+	}
+
+	@Redirect(
+			method = "initFlyingAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 4)
+	)
+	private void replaceFlyingGoal(GoalSelector tasks, int priority, net.minecraft.entity.ai.goal.Goal goal, PixelmonEntity pixelmon) {
+		tasks.addGoal(priority, new CustomFlyingGoal(pixelmon));
 	}
 }

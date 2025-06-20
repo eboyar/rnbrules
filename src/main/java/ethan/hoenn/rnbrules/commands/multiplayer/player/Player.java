@@ -34,7 +34,6 @@ public class Player {
 		CommandSource source = context.getSource();
 
 		if (!(source.getEntity() instanceof ServerPlayerEntity)) {
-			source.sendFailure(new StringTextComponent("This command can only be used by players!"));
 			return 0;
 		}
 
@@ -44,13 +43,13 @@ public class Player {
 			ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(context, "player");
 
 			if (mutingPlayer.getUUID().equals(targetPlayer.getUUID())) {
-				source.sendFailure(new StringTextComponent(TextFormatting.RED + "You cannot mute yourself!"));
+				mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "You cannot mute yourself!"), mutingPlayer.getUUID());
 				return 0;
 			}
 
 			SettingsManager settingsManager = SettingsManager.get();
 			if (settingsManager == null) {
-				source.sendFailure(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"));
+				mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"), mutingPlayer.getUUID());
 				return 0;
 			}
 
@@ -74,7 +73,7 @@ public class Player {
 
 			return 1;
 		} catch (Exception e) {
-			source.sendFailure(new StringTextComponent(TextFormatting.RED + "Error: " + e.getMessage()));
+			mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "Error: " + e.getMessage()), mutingPlayer.getUUID());
 			return 0;
 		}
 	}
@@ -83,7 +82,6 @@ public class Player {
 		CommandSource source = context.getSource();
 
 		if (!(source.getEntity() instanceof ServerPlayerEntity)) {
-			source.sendFailure(new StringTextComponent("This command can only be used by players!"));
 			return 0;
 		}
 
@@ -94,12 +92,12 @@ public class Player {
 
 			SettingsManager settingsManager = SettingsManager.get();
 			if (settingsManager == null) {
-				source.sendFailure(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"));
+				mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"), mutingPlayer.getUUID());
 				return 0;
 			}
 
 			if (!settingsManager.isPersonallyMuted(mutingPlayer.getUUID(), targetPlayer.getUUID())) {
-				source.sendFailure(new StringTextComponent(TextFormatting.RED + "You have not muted " + targetPlayer.getDisplayName().getString() + "!"));
+				mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "You have not muted " + targetPlayer.getDisplayName().getString() + "!"), mutingPlayer.getUUID());
 				return 0;
 			}
 
@@ -114,7 +112,7 @@ public class Player {
 
 			return 1;
 		} catch (Exception e) {
-			source.sendFailure(new StringTextComponent(TextFormatting.RED + "Error: " + e.getMessage()));
+			mutingPlayer.sendMessage(new StringTextComponent(TextFormatting.RED + "Error: " + e.getMessage()), mutingPlayer.getUUID());
 			return 0;
 		}
 	}
@@ -123,7 +121,6 @@ public class Player {
 		CommandSource source = context.getSource();
 
 		if (!(source.getEntity() instanceof ServerPlayerEntity)) {
-			source.sendFailure(new StringTextComponent("This command can only be used by players!"));
 			return 0;
 		}
 
@@ -131,7 +128,7 @@ public class Player {
 
 		SettingsManager settingsManager = SettingsManager.get();
 		if (settingsManager == null) {
-			source.sendFailure(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"));
+			player.sendMessage(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"), player.getUUID());
 			return 0;
 		}
 
@@ -168,7 +165,6 @@ public class Player {
 		CommandSource source = context.getSource();
 
 		if (!(source.getEntity() instanceof ServerPlayerEntity)) {
-			source.sendFailure(new StringTextComponent("This command can only be used by players!"));
 			return 0;
 		}
 
@@ -176,7 +172,7 @@ public class Player {
 
 		SettingsManager settingsManager = SettingsManager.get();
 		if (settingsManager == null) {
-			source.sendFailure(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"));
+			player.sendMessage(new StringTextComponent(TextFormatting.RED + "Settings manager not available!"), player.getUUID());
 			return 0;
 		}
 

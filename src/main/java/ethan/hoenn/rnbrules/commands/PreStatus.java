@@ -66,32 +66,32 @@ public class PreStatus {
 	public static int executePreStatus(CommandContext<CommandSource> context, int pos, String statusType, ServerPlayerEntity spe) {
 		try {
 			if (BattleRegistry.getBattle(spe) != null) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in battle."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in battle."), spe.getUUID());
 				return 0;
 			}
 
 			GauntletManager gm = GauntletManager.get(spe.getLevel());
 			if (gm.isPartOfAnyGauntlet(spe.getUUID())) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in a gauntlet."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "You cannot use this command while in a gauntlet."), spe.getUUID());
 				return 0;
 			}
 
 			PlayerPartyStorage pps = StorageProxy.getParty(spe);
 
 			if (pos < 1 || pos > 6 || pps.get(pos - 1) == null) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Invalid party position. Please choose a position between 1-6 with a Pokémon."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Invalid party position. Please choose a position between 1-6 with a Pokémon."), spe.getUUID());
 				return 0;
 			}
 
 			Pokemon target = pps.get(pos - 1);
 
 			if (Objects.requireNonNull(target).isFainted()) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Cannot apply status to a fainted Pokémon."));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Cannot apply status to a fainted Pokémon."), spe.getUUID());
 				return 0;
 			}
 
 			if (!VALID_STATUSES.contains(statusType)) {
-				context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Invalid status type. Valid options: " + String.join(", ", VALID_STATUSES)));
+				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Invalid status type. Valid options: " + String.join(", ", VALID_STATUSES)), spe.getUUID());
 				return 0;
 			}
 
@@ -109,31 +109,29 @@ public class PreStatus {
 					target.setStatus(new Paralysis());
 					break;
 				default:
-					context.getSource().sendFailure(new StringTextComponent(TextFormatting.RED + "Unknown status type: " + statusType));
+					spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Unknown status type: " + statusType), spe.getUUID());
 					return 0;
 			}
 
-			context
-				.getSource()
-				.sendSuccess(
-					new StringTextComponent(
-						TextFormatting.GREEN +
-						"Successfully applied " +
-						TextFormatting.GOLD +
-						statusType +
-						TextFormatting.GREEN +
-						" status to " +
-						TextFormatting.AQUA +
-						target.getDisplayName() +
-						TextFormatting.GREEN +
-						"."
-					),
-					true
-				);
+			spe.sendMessage(
+				new StringTextComponent(
+					TextFormatting.GREEN +
+					"Successfully applied " +
+					TextFormatting.GOLD +
+					statusType +
+					TextFormatting.GREEN +
+					" status to " +
+					TextFormatting.AQUA +
+					target.getSpecies().getLocalizedName() +
+					TextFormatting.GREEN +
+					"."
+				),
+				spe.getUUID()
+			);
 
 			return 1;
 		} catch (Exception e) {
-			context.getSource().sendFailure(new StringTextComponent(TextFormatting.GRAY + "Error executing command: " + e.getMessage()));
+			spe.sendMessage(new StringTextComponent(TextFormatting.GRAY + "Error executing command: " + e.getMessage()), spe.getUUID());
 			e.printStackTrace();
 			return 0;
 		}

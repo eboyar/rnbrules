@@ -41,20 +41,20 @@ public class ListHM {
 		Set<String> hms = hmManager.getPlayerHMs(playerUUID);
 
 		if (hms.isEmpty()) {
-			source.sendSuccess(
+			requestingPlayer.sendMessage(
 				new StringTextComponent(requestingPlayer == targetPlayer ? "You don't have any HMs." : targetPlayer.getDisplayName().getString() + " doesn't have any HMs.").withStyle(TextFormatting.GRAY),
-				false
+				requestingPlayer.getUUID()
 			);
 		} else {
-			source.sendSuccess(
+			requestingPlayer.sendMessage(
 				new StringTextComponent(requestingPlayer == targetPlayer ? "Your HMs (" + hms.size() + "): " : targetPlayer.getDisplayName().getString() + "'s HMs (" + hms.size() + "): ").withStyle(
 					TextFormatting.GREEN
 				),
-				false
+				requestingPlayer.getUUID()
 			);
 
 			for (String hm : hms) {
-				source.sendSuccess(new StringTextComponent(" - " + formatHMName(hm)).withStyle(TextFormatting.AQUA), false);
+				requestingPlayer.sendMessage(new StringTextComponent(" - " + formatHMName(hm)).withStyle(TextFormatting.AQUA), requestingPlayer.getUUID());
 			}
 		}
 		return hms.size();

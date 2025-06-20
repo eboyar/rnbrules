@@ -29,7 +29,7 @@ public class Fly {
 		try {
 			HiddenMachineManager hmManager = HiddenMachineManager.get((ServerWorld) player.level);
 			if (!hmManager.hasHM(player.getUUID(), HiddenMachine.FLY.getHmId())) {
-				source.sendFailure(new StringTextComponent("You don't have the Fly HM.").withStyle(TextFormatting.RED));
+				player.sendMessage(new StringTextComponent("You don't have the Fly HM.").withStyle(TextFormatting.RED), player.getUUID());
 				return 0;
 			}
 
@@ -53,7 +53,7 @@ public class Fly {
 			openFlyGui(player);
 			return 1;
 		} catch (Exception e) {
-			source.sendFailure(new StringTextComponent("Error: " + e.getMessage()));
+			player.sendMessage(new StringTextComponent("Error: " + e.getMessage()), player.getUUID());
 			e.printStackTrace();
 			return 0;
 		}
