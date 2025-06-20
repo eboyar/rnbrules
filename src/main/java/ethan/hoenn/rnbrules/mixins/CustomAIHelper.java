@@ -43,8 +43,8 @@ public class CustomAIHelper {
 	}
 
 	@Redirect(
-			method = "initFlyingAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 4)
+		method = "initFlyingAI(Lcom/pixelmonmod/pixelmon/entities/pixelmon/PixelmonEntity;Lnet/minecraft/entity/ai/goal/GoalSelector;)V",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 4)
 	)
 	private void replaceFlyingGoal(GoalSelector tasks, int priority, net.minecraft.entity.ai.goal.Goal goal, PixelmonEntity pixelmon) {
 		tasks.addGoal(priority, new CustomFlyingGoal(pixelmon));

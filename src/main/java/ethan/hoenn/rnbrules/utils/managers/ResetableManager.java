@@ -8,6 +8,5 @@ import java.util.UUID;
  * to allow for centralized player data reset functionality.
  */
 public interface ResetableManager {
-
 	boolean resetPlayerData(UUID playerUUID);
 }

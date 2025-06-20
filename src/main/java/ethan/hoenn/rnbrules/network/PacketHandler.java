@@ -43,5 +43,7 @@ public class PacketHandler {
 		INSTANCE.registerMessage(packetId++, EnvironmentSyncPacket.class, EnvironmentSyncPacket::encode, EnvironmentSyncPacket::decode, EnvironmentSyncPacket::handle);
 
 		INSTANCE.registerMessage(packetId++, LocationPopupPacket.class, LocationPopupPacket::encode, LocationPopupPacket::decode, LocationPopupPacket::handle);
+
+		INSTANCE.registerMessage(packetId++, PlayerInfoUpdatePacket.class, PlayerInfoUpdatePacket::encode, PlayerInfoUpdatePacket::decode, PlayerInfoUpdatePacket::handle);
 	}
 }

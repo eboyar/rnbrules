@@ -55,7 +55,7 @@ public class PreDamage {
 			}
 
 			PlayerPartyStorage pps = StorageProxy.getParty(spe);
-			
+
 			if (pos < 1 || pos > 6 || pps.get(pos - 1) == null) {
 				spe.sendMessage(new StringTextComponent(TextFormatting.RED + "Invalid party position. Please choose a position between 1-6 with a Pokémon."), spe.getUUID());
 				return 0;

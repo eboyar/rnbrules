@@ -12,7 +12,6 @@ import java.util.UUID;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
@@ -21,7 +20,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class LocationListener {
@@ -32,7 +30,7 @@ public class LocationListener {
 	private static final Map<UUID, Integer> playerStepCount = new HashMap<>();
 	private static final int ROAMER_CHECK_STEPS = 500;
 
-	private static final int TICK_GROUPS = 5;
+	private static final int TICK_GROUPS = 1;
 	private static final List<List<UUID>> playerTickGroups = new ArrayList<>(TICK_GROUPS);
 	private static final Map<UUID, Integer> playerToGroupMap = new HashMap<>();
 
@@ -42,8 +40,6 @@ public class LocationListener {
 	private static int tickCounter = 0;
 	private static final int CHECK_FREQUENCY = 5;
 
-	private static boolean initialPlayerDistributionDone = false;
-
 	static {
 		for (int i = 0; i < TICK_GROUPS; i++) {
 			playerTickGroups.add(new ArrayList<>());
@@ -51,6 +47,10 @@ public class LocationListener {
 	}
 
 	private static void addPlayerToDistribution(UUID playerUUID) {
+		if (playerToGroupMap.containsKey(playerUUID)) {
+			return;
+		}
+
 		int minGroupSize = Integer.MAX_VALUE;
 		int targetGroup = 0;
 
@@ -70,23 +70,6 @@ public class LocationListener {
 		Integer group = playerToGroupMap.remove(playerUUID);
 		if (group != null) {
 			playerTickGroups.get(group).remove(playerUUID);
-		}
-	}
-
-	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event) {
-		if (!initialPlayerDistributionDone && event.phase == TickEvent.Phase.END) {
-			initialPlayerDistributionDone = true;
-
-			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-
-			if (server != null) {
-				for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
-					if (!playerToGroupMap.containsKey(player.getUUID())) {
-						addPlayerToDistribution(player.getUUID());
-					}
-				}
-			}
 		}
 	}
 

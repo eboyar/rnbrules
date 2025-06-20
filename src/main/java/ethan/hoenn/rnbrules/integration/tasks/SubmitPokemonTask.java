@@ -130,9 +130,7 @@ public class SubmitPokemonTask extends PokemonTask {
 							(this.hasOT.isDefault() || pokemon.getOriginalTrainerUUID().equals(player.getUUID()) == this.hasOT.isTrue())
 						) {
 							teamData.addProgress(this, 1L);
-							if (
-								this.consumePokemon
-							) pcbox.set(slot, null); //Only consume if the task is set to consume
+							if (this.consumePokemon) pcbox.set(slot, null); //Only consume if the task is set to consume
 							return;
 						}
 					}
@@ -150,9 +148,7 @@ public class SubmitPokemonTask extends PokemonTask {
 						(this.hasOT.isDefault() || pokemon.getOriginalTrainerUUID().equals(player.getUUID()) == this.hasOT.isTrue())
 					) {
 						teamData.addProgress(this, 1L);
-						if (
-							this.consumePokemon
-						) StorageProxy.getParty(player).set(slot, null); //Only consume if the task is set to consume
+						if (this.consumePokemon) StorageProxy.getParty(player).set(slot, null); //Only consume if the task is set to consume
 						return;
 					}
 				}

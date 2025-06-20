@@ -42,7 +42,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 
 public class DialogueNPCListener {
 
-	
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onInteractWithChattingNPC(NPCEvent.Interact event) {
 		if (event.npc instanceof NPCChatting && event.player instanceof ServerPlayerEntity && !(event.player.getMainHandItem().getItem().equals(PixelmonItems.trainer_editor))) {
@@ -80,7 +79,6 @@ public class DialogueNPCListener {
 				return;
 			}
 
-			
 			if (progressionManager.hasCompletedDialogue(playerUUID, npc.getUUID(), dialogueId)) {
 				return;
 			}
@@ -109,7 +107,6 @@ public class DialogueNPCListener {
 		BattleDependencyManager depManager = BattleDependencyManager.get((ServerWorld) player.level);
 		ProgressionManager progressionManager = ProgressionManager.get();
 
-		
 		BattleController bc = trainer.getBattleController();
 		if (bc != null) {
 			if (!bc.battleEnded) {
@@ -118,13 +115,11 @@ public class DialogueNPCListener {
 			}
 		}
 
-		
 		if (!trainer.canStartBattle(player, true)) {
 			event.setCanceled(true);
 			return;
 		}
 
-		
 		if (data.contains("DialoguesMap")) {
 			CompoundNBT dialoguesMap = data.getCompound("DialoguesMap");
 			if (!dialoguesMap.isEmpty()) {
@@ -136,10 +131,8 @@ public class DialogueNPCListener {
 				}
 
 				if (result.dialogId != null) {
-					
 					PlayerPartyStorage storage = StorageProxy.getParty(player);
-					
-					
+
 					Pokemon firstPokemon = null;
 					for (Pokemon p : storage.getAll()) {
 						if (p != null && p.getHealth() > 0 && !p.isEgg()) {
@@ -147,7 +140,7 @@ public class DialogueNPCListener {
 							break;
 						}
 					}
-					
+
 					if (firstPokemon == null) {
 						sendCancelMessage(event, player, "§7You need at least one healthy Pokemon to battle.");
 						return;
@@ -156,15 +149,13 @@ public class DialogueNPCListener {
 					final Pokemon pokemon = firstPokemon;
 					TrainerParticipant trainerParticipant = new TrainerParticipant(trainer, player, trainer.getBattleType().getNumPokemon());
 					PlayerParticipant playerParticipant;
-					
+
 					if (trainer.getBattleType().getNumPokemon() == 1) {
-						playerParticipant = new PlayerParticipant(player, new Pokemon[]{pokemon});
+						playerParticipant = new PlayerParticipant(player, new Pokemon[] { pokemon });
 					} else {
 						List<Pokemon> pokemonList = new ArrayList<>();
 						pokemonList.add(pokemon);
-						pokemonList.addAll(storage.getTeam().stream()
-							.filter(p -> p.getHealth() > 0 && p != pokemon)
-							.collect(Collectors.toList()));
+						pokemonList.addAll(storage.getTeam().stream().filter(p -> p.getHealth() > 0 && p != pokemon).collect(Collectors.toList()));
 						playerParticipant = new PlayerParticipant(player, pokemonList, 2);
 					}
 
@@ -175,33 +166,26 @@ public class DialogueNPCListener {
 			}
 		}
 
-		
 		if (data.contains("DialogueID")) {
 			String dialogueId = data.getString("DialogueID");
 			if (!dialogueId.isEmpty()) {
-				
 				if (progressionManager.hasCompletedDialogue(playerUUID, trainer.getUUID(), dialogueId)) {
-					return; 
+					return;
 				}
 
-				
 				if (depManager.trainerHasDependencies(trainer)) {
 					Set<String> npcDeps = depManager.getTrainerDependencies(trainer);
 					for (String depId : npcDeps) {
 						if (!depManager.playerHasDependency(player.getUUID(), depId)) {
-							String depDescription = depManager.getDependency(depId) != null ? 
-								depManager.getDependency(depId).getDescription() : "Unknown requirement";
-							sendCancelMessage(event, player, "§9" + trainer.getName("en_us") + 
-								"§7 wants to battle you, but you must §6" + depDescription + "§7 first.");
+							String depDescription = depManager.getDependency(depId) != null ? depManager.getDependency(depId).getDescription() : "Unknown requirement";
+							sendCancelMessage(event, player, "§9" + trainer.getName("en_us") + "§7 wants to battle you, but you must §6" + depDescription + "§7 first.");
 							return;
 						}
 					}
 				}
 
-				
 				PlayerPartyStorage storage = StorageProxy.getParty(player);
-				
-				
+
 				Pokemon firstPokemon = null;
 				for (Pokemon p : storage.getAll()) {
 					if (p != null && p.getHealth() > 0 && !p.isEgg()) {
@@ -209,7 +193,7 @@ public class DialogueNPCListener {
 						break;
 					}
 				}
-				
+
 				if (firstPokemon == null) {
 					sendCancelMessage(event, player, "§7You need at least one healthy Pokemon to battle.");
 					return;
@@ -218,15 +202,13 @@ public class DialogueNPCListener {
 				final Pokemon pokemon = firstPokemon;
 				TrainerParticipant trainerParticipant = new TrainerParticipant(trainer, player, trainer.getBattleType().getNumPokemon());
 				PlayerParticipant playerParticipant;
-				
+
 				if (trainer.getBattleType().getNumPokemon() == 1) {
-					playerParticipant = new PlayerParticipant(player, new Pokemon[]{pokemon});
+					playerParticipant = new PlayerParticipant(player, new Pokemon[] { pokemon });
 				} else {
 					List<Pokemon> pokemonList = new ArrayList<>();
 					pokemonList.add(pokemon);
-					pokemonList.addAll(storage.getTeam().stream()
-						.filter(p -> p.getHealth() > 0 && p != pokemon)
-						.collect(Collectors.toList()));
+					pokemonList.addAll(storage.getTeam().stream().filter(p -> p.getHealth() > 0 && p != pokemon).collect(Collectors.toList()));
 					playerParticipant = new PlayerParticipant(player, pokemonList, 2);
 				}
 
@@ -329,7 +311,6 @@ public class DialogueNPCListener {
 		}
 		Collections.sort(dialogOrders);
 
-		
 		ProgressionManager progressionManager = ProgressionManager.get();
 		UUID npcUUID = npcEntity.getUUID();
 
@@ -346,7 +327,6 @@ public class DialogueNPCListener {
 				continue;
 			}
 
-			
 			if (progressionManager.hasCompletedDialogue(playerUUID, npcUUID, dialogID)) {
 				continue;
 			}

@@ -496,12 +496,12 @@ public class DialogueNPCManager {
 
 		//boolean result = MultiBattleManager.startTrainerBattle(dialogueData.playerParticipant, dialogueData.trainerParticipant);
 		TeamSelectionRegistry.builder()
-				.members(new Entity[]{dialogueData.getTrainerParticipant().trainer, dialogueData.getPlayerParticipant().player})
-				.showRules()
-				.showOpponentTeam()
-				.closeable()
-				.battleRules(dialogueData.getTrainerParticipant().trainer.battleRules)
-				.start();
+			.members(new Entity[] { dialogueData.getTrainerParticipant().trainer, dialogueData.getPlayerParticipant().player })
+			.showRules()
+			.showOpponentTeam()
+			.closeable()
+			.battleRules(dialogueData.getTrainerParticipant().trainer.battleRules)
+			.start();
 
 		activeTrainerDialogues.remove(playerUUID);
 		return true;
